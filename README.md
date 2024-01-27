@@ -1,13 +1,11 @@
-# Computer_Science
-Computer science projects for lazy people
+# Manav_Code
 
 
-Please add your own computer science projects as and when you think it is appropriate 
+This is the space where I keep all my code
 
+windows cd = C:\Users\27mcodaty\Manav_Code
+mac cd = Manav_Code
 
+github link = https://github.com/manavcodaty/Manav_Code.git
 
-
-
-
-
-Made by Manav Codaty
+21.10.23
