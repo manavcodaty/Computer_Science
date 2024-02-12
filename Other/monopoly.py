@@ -1,12 +1,13 @@
 from random import randint
 
-class Dye(object):
 
+class Dye(object):
     def __init__(self):
         pass
 
     def roll(self):
-        return randint(0,6)
+        return randint(0, 6)
+
 
 class Tile(object):
     """
@@ -20,6 +21,7 @@ class Tile(object):
     def trigger_event(self):
         print("Triggered Default Tile Event")
 
+
 class Property(Tile):
     """
     Data Attributes:
@@ -31,16 +33,15 @@ class Property(Tile):
         owner
     """
 
-    def __init__(self, name, price, base_rent, is_utility=False, 
-                 is_rr=False):
+    def __init__(self, name, price, base_rent, is_utility=False, is_rr=False):
         self.name = name
         self.price = price
         self.base_rent = base_rent
-        self.owner=None
+        self.owner = None
 
-        if(is_utility):
+        if is_utility:
             self.is_utility = True
-        if(is_rr):
+        if is_rr:
             self.is_rr = True
 
     def trigger_event(self):
@@ -48,33 +49,44 @@ class Property(Tile):
             print("You landed on an unowned property")
 
             while True:
-                print("\n", "Unowned Property Menu")    
+                print("\n", "Unowned Property Menu")
                 Game.display_menu(Game.unowned_property_menu)
                 selection = input("Select an option by typing a number: ")
-                if selection == '1':
+                if selection == "1":
                     # Buy Property
                     if Game.current_player.balance >= self.price:
                         Game.current_player.owned_properties.append(self)
-                        Game.current_player.balance -= self.price 
-                        print("Congratulations!", Game.current_player.name, 
-                              "has successfully bought", self.name, 
-                              "for the price of", self.price)
+                        Game.current_player.balance -= self.price
+                        print(
+                            "Congratulations!",
+                            Game.current_player.name,
+                            "has successfully bought",
+                            self.name,
+                            "for the price of",
+                            self.price,
+                        )
                         Game.current_player.display_balance()
                     else:
-                        print("Your balance of", Game.current_player.balance,
-                              "is insufficient to buy", self.name, "at the price of",
-                              self.price)
+                        print(
+                            "Your balance of",
+                            Game.current_player.balance,
+                            "is insufficient to buy",
+                            self.name,
+                            "at the price of",
+                            self.price,
+                        )
 
-                    break    
-                elif selection == '2':
+                    break
+                elif selection == "2":
                     # Do Not Buy Property
                     print("You chose not to buy {}.".format(self.name))
                     break
                 else:
-                   print("Unknown option selected!")
+                    print("Unknown option selected!")
 
     def view_property(self):
-        print(self.name)    
+        print(self.name)
+
 
 class Player(object):
     """
@@ -86,46 +98,51 @@ class Player(object):
        current_tile_index
        current_tile
        is_in_jail
-       properties_owned       
+       properties_owned
        amount_of_money
     """
+
     player_list = []
     MAX_NUM_PLAYERS = 4
 
     def __init__(self, name):
         if len(Player.player_list) == Player.MAX_NUM_PLAYERS:
-            print("Error: Cannot have more than", Player.MAX_NUM_PLAYERS, "players!") #DEBUG
-        else:    
+            print(
+                "Error: Cannot have more than", Player.MAX_NUM_PLAYERS, "players!"
+            )  # DEBUG
+        else:
             self.name = name
             self.current_tile_index = 0
-            self.current_tile = None # sets current tile to "GO" 
+            self.current_tile = None  # sets current tile to "GO"
             self.is_in_jail = False
             self.num_rounds_in_jail = 0
             self.owned_properties = []
             self.balance = 1500
 
             Player.player_list.append(self)
-            print(self.name, "has been succesfully added!") #DEBUG            
+            print(self.name, "has been succesfully added!")  # DEBUG
 
-    def roll_and_move(self): # should a method from one class depend on a data attribute from another class?
+    def roll_and_move(
+        self,
+    ):  # should a method from one class depend on a data attribute from another class?
         roll_1 = Game.DYE.roll()
         roll_2 = Game.DYE.roll()
         total_roll = roll_1 + roll_2
-        print("You rolled a", roll_1) #DEBUG
-        print("You rolled a", roll_2) #DEBUG
+        print("You rolled a", roll_1)  # DEBUG
+        print("You rolled a", roll_2)  # DEBUG
 
         # move player to new tile
         if total_roll + self.current_tile_index >= len(Game.BOARD):
-            final_index = (self.current_tile_index + total_roll) - len(Game.BOARD) 
+            final_index = (self.current_tile_index + total_roll) - len(Game.BOARD)
             self.current_tile_index = final_index
             self.current_tile = Game.BOARD[self.current_tile_index]
-            self.balance += 200 # Pass GO
-            print("You passed GO!") #DEBUG
+            self.balance += 200  # Pass GO
+            print("You passed GO!")  # DEBUG
         else:
             self.current_tile_index = self.current_tile_index + total_roll
             self.current_tile = Game.BOARD[self.current_tile_index]
 
-        print("Your current tile is now",self.current_tile.name)    #DEBUG
+        print("Your current tile is now", self.current_tile.name)  # DEBUG
 
         # trigger_event
         self.current_tile.trigger_event()
@@ -158,24 +175,22 @@ class Player(object):
 
 
 class Game(object):
-    """ Instantiate once"""
+    """Instantiate once"""
 
     current_player = None
     turn_counter = 0
     DYE = Dye()
-    BOARD = None   
+    BOARD = None
     setup_menu = None
     player_menu = None
     unowned_property_menu = None
 
-
     def __init__(self):
-
         Game.BOARD = [
             Tile("GO"),
             Property("Mediterranean Avenue", 60, 2),
             Tile("Community Chest"),
-            Property("Baltic Avenue",60, 8),
+            Property("Baltic Avenue", 60, 8),
             Tile("Income Tax"),
             Property("Reading Railroad", 200, 50),
             Property("Oriental Avenue", 100, 6),
@@ -211,44 +226,44 @@ class Game(object):
             Tile("Chance"),
             Property("Park Place", 350, 35),
             Tile("Luxury Tax"),
-            Property("Boardwalk", 400, 50)]
+            Property("Boardwalk", 400, 50),
+        ]
 
         Game.setup_menu = {}
-        Game.setup_menu['1'] = "Add Player." 
-        Game.setup_menu['2'] = "Start Game."
+        Game.setup_menu["1"] = "Add Player."
+        Game.setup_menu["2"] = "Start Game."
 
         Game.player_menu = {}
-        Game.player_menu['1'] = "Roll Dice."
-        Game.player_menu['2'] = "Display Owned Properties."
+        Game.player_menu["1"] = "Roll Dice."
+        Game.player_menu["2"] = "Display Owned Properties."
 
         Game.unowned_property_menu = {}
-        Game.unowned_property_menu['1'] = "Buy Property"
-        Game.unowned_property_menu['2'] = "Do Not Buy Property"
+        Game.unowned_property_menu["1"] = "Buy Property"
+        Game.unowned_property_menu["2"] = "Do Not Buy Property"
 
         print("Welcome to Console Monopoly!")
         while True:
             print("\n")
             Game.display_menu(Game.setup_menu)
             selection = input("Select an option by typing a number: ")
-            if selection == '1':
+            if selection == "1":
                 player_name = input("Please enter player name: ")
                 Player(player_name)
-            elif selection == '2':
+            elif selection == "2":
                 if len(Player.player_list) == 0:
                     print("Error: Cannot start game without players")
                 else:
                     break
             else:
-               print("Unknown option selected!")
+                print("Unknown option selected!")
 
         Game.current_player = Player.player_list[0]
-        self.main() # Starts Main Game
+        self.main()  # Starts Main Game
 
     @staticmethod
     def display_menu(menu: dict):
         for option in menu:
             print("{}. {}".format(option, menu[option]))
-
 
     def start_player_turn(self):
         if Game.current_player.is_in_jail:
@@ -257,25 +272,25 @@ class Game(object):
                 Game.current_player.get_out_of_jail()
             else:
                 print("Haven't coded this bit yet!")
-                #TODO:
-                #increment current_player.num_turns_in_jail
-                #display in_jail_menu
-                #code logic for menu selections
-        elif True==False: #if player is bankrupt/ has lost
+                # TODO:
+                # increment current_player.num_turns_in_jail
+                # display in_jail_menu
+                # code logic for menu selections
+        elif True == False:  # if player is bankrupt/ has lost
             pass
         else:
             while True:
                 print("\n", "Player Menu:")
                 Game.display_menu(Game.player_menu)
                 selection = input("Select an option by typing a number: ")
-                if selection == '1':
+                if selection == "1":
                     # Player Rolls Dice and Moves
                     Game.current_player.roll_and_move()
-                elif selection == '2':
+                elif selection == "2":
                     # TODO:
                     print("TODO: Code diplay owned properties function")
                 else:
-                   print("Unknown option selected!")
+                    print("Unknown option selected!")
 
     def end_player_turn(self):
         pass
@@ -284,12 +299,11 @@ class Game(object):
         while True:
             if Game.current_player.is_in_jail:
                 self.end_player_turn()
-            elif True == False: #TODO:make function that checks if there is a winner
-                pass # all other players bankrupt, end game 
+            elif True == False:  # TODO:make function that checks if there is a winner
+                pass  # all other players bankrupt, end game
             else:
                 self.start_player_turn()
 
 
-
-if __name__ == "__main__":    
+if __name__ == "__main__":
     Game()
