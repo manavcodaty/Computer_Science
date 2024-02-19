@@ -9,16 +9,20 @@ menu = {
     "MEP": {"name": "Medium pizza with extra toppings", "price": 11.00},
     "LP": {"name": "Large pizza", "price": 12.00},
     "LEP": {"name": "Large pizza with extra toppings", "price": 14.50},
-    "GB": {"name": "Garlic bread", "price": 4.50}
+    "GB": {"name": "Garlic bread", "price": 4.50},
 }
+
 
 def print_menu():
     print("-----------Menu-----------")
     for item_code, item in menu.items():
         print(f"{item_code} - {item['name']} (${item['price']:.2f})")
 
+
 # TASK 2 - Placing an order.
 orders = []
+
+
 def place_order():
     order = {}
     print("Enter item code and quantity. Enter 'done' when finished.")
@@ -32,6 +36,7 @@ def place_order():
     orders.append({"order_code": order_code, "items": order})
     print_order(order_code)
 
+
 def print_order(order_code):
     order = orders[order_code - 1]
     total_cost = 0
@@ -44,7 +49,10 @@ def print_order(order_code):
         print(f"{item_name} x {quantity} = ${total_item_cost:.2f}")
     print(f"Total cost: ${total_cost:.2f}")
 
+
 # TASK 3 - Calculating daily takings and profit.
+
+
 def calculate_takings_and_profit(profit_percentage):
     total_takings = 0
     for order in orders:
@@ -53,8 +61,7 @@ def calculate_takings_and_profit(profit_percentage):
     profit = total_takings * profit_percentage / 100
     print(f"Total daily takings: ${total_takings:.2f}")
     print(f"Profit: ${profit:.2f} ({profit_percentage}%)")
-    
-    
+
 
 print_menu()
 place_order()
