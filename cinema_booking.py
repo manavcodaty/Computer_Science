@@ -5,6 +5,15 @@ arr = ([0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0])
 
 df = pd.DataFrame(arr)
 
+def validation(booking_row, booking_col):
+    if booking_row > 4 or booking_col > 4:
+        print("Invalid row or column number")
+        make_booking()
+    elif booking_col < 0 or booking_row < 0:
+        print("Invalid row or column number")
+        make_booking()
+    
+
 print(df)
 def make_booking():
     booking_row = int(input("Enter row number: "))
