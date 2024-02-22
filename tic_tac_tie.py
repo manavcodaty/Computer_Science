@@ -53,8 +53,24 @@ def make_move():
     else:
         print("Spot already taken")
         make_move()
+        
+def make_move_o():
+    print("Enter row number: ")
+    row = int(input())
+    print("Enter column number: ")
+    col = int(input())
+    if arr[row][col] == 0:
+        arr[row][col] = "O"
+        print_board()
+        if check_winner():
+            print("Player 2 wins!")
+            sys.exit(0.5)
+        make_move()
+    else:
+        print("Spot already taken")
+        make_move()
 
-def make_move():
+def make_move_x():
     print("Enter row number: ")
     row = int(input())
     print("Enter column number: ")
