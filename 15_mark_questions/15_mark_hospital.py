@@ -1,14 +1,18 @@
-patient = ["Bob","Jill","Ben","Grace"]
-Readings = [[35.60,56.00],[31.50,55.00],[32.60,101.00],[54.00,101.00]] # Temperature, Pulse
+patient = ["Bob", "Jill", "Ben", "Grace"]
+Readings = [
+    [35.60, 56.00],
+    [31.50, 55.00],
+    [32.60, 101.00],
+    [54.00, 101.00],
+]  # Temperature, Pulse
 global temp, pulse
 temp = True
 pulse = True
 #            temp, pulse
 
 
-
 def hospital(num, pulse, temp):
-    if num < 0 or num > 3: # Checking patient number
+    if num < 0 or num > 3:  # Checking patient number
         print("Invalid patient number")
     else:
         print("Patient: ", patient[num])
@@ -27,14 +31,8 @@ def hospital(num, pulse, temp):
     if pulse == False and temp == False:
         print("Severe Warning")
         print("Temperature and pulse out of range")
-            
-patient_num = int(input("Enter patient number: "))    
-num = patient_num - 1 
+
+
+patient_num = int(input("Enter patient number: "))
+num = patient_num - 1
 hospital(num, pulse, temp)
-                
-                
-                    
-                
-    
-    
-    

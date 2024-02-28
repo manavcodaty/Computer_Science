@@ -1,8 +1,10 @@
-import pandas as pd
 import random
 import sys
 
-arr = [[0,0,0], [0,0,0], [0,0,0]]
+import pandas as pd
+
+arr = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
 
 def validation(row, col):
     if row > 2 or col > 2:
@@ -11,7 +13,8 @@ def validation(row, col):
     elif col < 0 or row < 0:
         print("Invalid row or column number")
         make_move()
-        
+
+
 def ai_move():
     row = random.randint(0, 2)
     col = random.randint(0, 2)
@@ -25,6 +28,7 @@ def ai_move():
     else:
         ai_move()
 
+
 def check_winner():
     for i in range(3):
         if arr[i][0] == arr[i][1] == arr[i][2] and arr[i][0] != 0:
@@ -36,6 +40,7 @@ def check_winner():
     if arr[0][2] == arr[1][1] == arr[2][0] and arr[0][2] != 0:
         return True
     return False
+
 
 def make_move():
     print("Enter row number: ")
@@ -53,7 +58,8 @@ def make_move():
     else:
         print("Spot already taken")
         make_move()
-        
+
+
 def make_move_o():
     print("Enter row number: ")
     row = int(input())
@@ -69,6 +75,7 @@ def make_move_o():
     else:
         print("Spot already taken")
         make_move()
+
 
 def make_move_x():
     print("Enter row number: ")
@@ -86,11 +93,12 @@ def make_move_x():
         print("Spot already taken")
         make_move()
 
+
 def print_board():
     df = pd.DataFrame(arr)
     print(df)
-    
-    
+
+
 def start():
     print("Welcome to Tic Tac Toe")
     print("Would you like to play 1 player or 2 player? (1/2)")
@@ -103,6 +111,6 @@ def start():
         print("Player 1 is X and Player 2 is O")
         print_board()
         make_move()
-        
-        
+
+
 start()
