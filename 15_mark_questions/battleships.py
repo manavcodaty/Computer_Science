@@ -8,11 +8,12 @@ for x in range(0, 5):
     board1.append(["O"] * 5)
     board2.append(["O"] * 5)
 
+
 def print_board(board):
     for row in board:
         print(" ".join(row))
-        
-        
+
+
 def handle_guess(board, guess_row, guess_col):
     if guess_row not in range(5) or guess_col not in range(5):
         print("Oops, that's not even in the ocean.")
@@ -23,12 +24,17 @@ def handle_guess(board, guess_row, guess_col):
         board[guess_row][guess_col] = "X"
     print_board(board)
 
+
 # Randomly place a ship
+
+
 def random_row(board):
     return random.randint(0, len(board) - 1)
 
+
 def random_col(board):
     return random.randint(0, len(board[0]) - 1)
+
 
 ship_row1 = random_row(board1)
 ship_col1 = random_col(board1)
@@ -57,4 +63,3 @@ for turn in range(5):
         break
     else:
         handle_guess(board2, guess_row2, guess_col2)
-
