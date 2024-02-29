@@ -1,4 +1,6 @@
-File_handle = open("/Users/manavcodaty/Repos/Computer_Science/3a. Task1Data (3).txt", "r")
+File_handle = open(
+    "/Users/manavcodaty/Repos/Computer_Science/3a. Task1Data (3).txt", "r"
+)
 read_line = File_handle.readline()
 
 while len(read_line) > 0:
