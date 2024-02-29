@@ -1,8 +1,7 @@
 import pandas
 
-board = [[0, 0, 0],
-         [0, 0, 0],
-         [0, 0, 0]]
+board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+
 
 def print_board():
     df = pandas.DataFrame(board)
