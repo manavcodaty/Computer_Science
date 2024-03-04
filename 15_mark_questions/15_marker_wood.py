@@ -10,8 +10,6 @@ name = ""
 wood = ""
 
 
-
-
 def validation():
     if length < 1.5 or length > 10:
         print("Invalid length")
@@ -23,6 +21,8 @@ def validation():
         return False
     else:
         return True
+
+
 def main():
     name = input("Enter your name: ")
     customers.append(name)
@@ -52,15 +52,3 @@ def main():
 
 
 main()
-
-
-    
-
-
-
-
-    
-
-
-        
- 
