@@ -1,4 +1,3 @@
-
 while msg != -1:
     msg = input("Enter the message to append: ")
     file = open("hello_world.txt", "w")
@@ -9,4 +8,3 @@ while msg != -1:
     content = file.read()
     print(content)
     file.close()
-        
