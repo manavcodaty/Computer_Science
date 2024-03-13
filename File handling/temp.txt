@@ -1,4 +1,25 @@
+# Open the file in read mode
+FileHandle = open("score.txt", "r")
 
+# Read all lines from the file
+lines = FileHandle.readlines()
+
+# Close the file
+FileHandle.close()
+
+# Open the file in write mode
+FileHandle = open("score.txt", "w")
+
+# Process each line
+for line in lines:
+    # Replace the "#" character with a "." character
+    new_string = line.replace("#", ".")
+    # Write the new string to the file
+    FileHandle.write(new_string)
+    print(new_string)
+
+# Close the file
+FileHandle.close()
                 
                     
                 
