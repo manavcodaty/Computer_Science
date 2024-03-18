@@ -15,11 +15,18 @@ def append_value():
         check()
         final = str(mem_num) + " " + date_visit
 
-        with open("file.txt", "a") as file:
-            file.write(final + "\n")
+        
+        while True:
+            fileHandle = open("file.txt", "a")
+            fileHandle.write(final + "\n")
+            fileHandle.close()
+            break
+       # with open("file.txt", "a") as file:
+       #     file.write(final + "\n")
             
             
 def search():
+    '''
     with open("file.txt", "r") as file:
         search = input("Enter the member number to search: ")
         for line in file:
@@ -27,6 +34,14 @@ def search():
                 print(line)
             else:
                 print("Not found")
+    '''
+    search = input("Enter the member number to search: ")
+    fileHandle = open("file.txt", "r")
+    for i in range(len(fileHandle)):
+        if search in fileHandle[i]:
+            print(fileHandle[i])
+        else:
+            print("Not found")
                 
                 
 def main():
