@@ -3,7 +3,7 @@
 students = []
 
 def add_student():
-    student = {}
+    student = []
     student = input("Please enter the student's name: ")
     students.append(student)
     print("Student added successfully")
