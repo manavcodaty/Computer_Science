@@ -38,7 +38,7 @@ def search():
     search = input("Enter the member number to search: ")
     fileHandle = open("file.txt", "r")
     for i in range(len(fileHandle)):
-        if search in fileHandle[i]:
+        if search == fileHandle[i]:
             print(fileHandle[i])
         else:
             print("Not found")
