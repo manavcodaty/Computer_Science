@@ -1,4 +1,3 @@
-import sys
 import pretty_errors
 id = 0
 
@@ -46,7 +45,8 @@ def menu():
     elif choice == 3:
         deposit()
     elif choice == 4:
-        sys.exit()
+        print("Goodbye")
+        
         
 
 def login():
