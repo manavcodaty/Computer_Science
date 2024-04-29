@@ -55,7 +55,11 @@ def get_votes():
 
 # Calculate results
 def calc_results():
-    max_votes = max(votes)
+    max_votes = votes[0]
+    for vote in votes:
+        if vote > max_votes:
+            max_votes = vote
+
     winners = []
     for i in range(len(votes)):
         if votes[i] == max_votes:
@@ -68,7 +72,6 @@ def calc_results():
         print("There is a tie between the following candidates: ", ', '.join(winners))
     else:
         print("The winner is: ", winners[0])
-        
         
 voted = []
 
