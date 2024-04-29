@@ -93,3 +93,7 @@ def verify():
     else:
         print("Incorrect username or password")
         verify()
+        
+get_candidates()
+verify()
+calc_results()
