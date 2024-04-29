@@ -43,7 +43,7 @@ def get_candidates():
 # Get student votes
 def get_votes():
     for i in range(num_students):
-        vote = input(f"{username}, enter the name of the candidate you vote for, or 'abstain' to abstain: ")
+        vote = input("Enter the name of the candidate you vote for, or 'abstain' to abstain: ")
         if vote in candidates:
             index = candidates.index(vote)
             votes[index] += 1
@@ -70,24 +70,23 @@ def calc_results():
         print("The winner is: ", winners[0])
         
         
+voted = []
+
 def verify():
     print("Enter unique voter ID to vote")
     voter_id = int(input("Enter your voter ID: "))
     username = input("Enter your username: ")
     password = input("Enter your password: ")
     
-    if voterID[voter_id][0] == username and voterID[voter_id][1] == password:
+    if voter_id in voted:
+        print("You have already voted.")
+        return None
+    elif voterID[voter_id][0] == username and voterID[voter_id][1] == password:
         print("Welcome", username)
         get_votes()
         calc_results()
+        voted.append(voter_id)
         return username
     else:
         print("Incorrect username or password")
         verify()
-
-def main():
-    get_candidates()
-    for student in num_students:
-        verify()
-        get_votes()
-        
