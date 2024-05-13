@@ -1,0 +1,8 @@
+DECLARE Input : STRING
+OUTPUT "What do you call a deer with no eyes"
+INPUT Input
+IF Input == "No eye deer" THEN
+	OUTPUT "How did you know?!"
+ELSE
+	OUPUT "No eye deer!"
+END 
