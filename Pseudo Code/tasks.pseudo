@@ -1,0 +1,81 @@
+----------------------------------------------------------------------------------------------------------------
+DECLARE Input : STRING
+OUTPUT "What do you call a deer with no eyes"
+INPUT Input
+IF Input == "No eye deer" THEN
+	OUTPUT "How did you know?!"
+ELSE
+	OUPUT "No eye deer!"
+END 
+----------------------------------------------------------------------------------------------------------------
+DECLARE num: REAL
+DECLARE total: REAL
+DECLARE count: INTEGER
+DECLARE average: REAL
+REPEAT
+	INPUT num
+	total <- total + num
+	count <- count + 1
+UNTIL count = 15
+average <- total/15
+OUTPUT total, average
+----------------------------------------------------------------------------------------------------------------
+DECLARE rainfall: INTEGER
+DECLARE sunshine: INTEGER
+DECLARE rainfall_total_1: INTEGER 
+DECLARE rainfall_total_2: INTEGER 
+DECLARE rainfall_total_3: INTEGER 
+DECLARE rainfall_total_4: INTEGER 
+DECLARE rainfall_total_5: INTEGER 
+DECLARE sunshine_total_1: INTEGER 
+DECLARE sunshine_total_2: INTEGER 
+DECLARE sunshine_total_3: INTEGER 
+DECLARE sunshine_total_4: INTEGER 
+DECLARE sunshine_total_5: INTEGER 
+DECLARE count: INTEGER 
+DECLARE resort: INTEGER
+
+rainfall, sunshine, rainfall_total_1, rainfall_total_2, rainfall_total_3, rainfall_total_4, rainfall_total_5, sunshine_total_1, sunshine_total_2, sunshine_total_3, sunshine_total_4, sunshine_total_5 <- 0
+count, resort <- 1
+
+WHILE count <= 365
+    resort = 1
+    WHILE resort <= 5
+        OUTPUT "Enter the rainfall and sunshine for day ", count, " and resort ", resort
+        INPUT rainfall
+        INPUT sunshine
+        IF resort = 1 THEN
+            rainfall_total_1 = rainfall_total_1 + rainfall
+            sunshine_total_1 = sunshine_total_1 + sunshine
+        ELSE IF resort = 2 THEN
+            rainfall_total_2 = rainfall_total_2 + rainfall
+            sunshine_total_2 = sunshine_total_2 + sunshine
+        ELSE IF resort = 3 THEN
+            rainfall_total_3 = rainfall_total_3 + rainfall
+            sunshine_total_3 = sunshine_total_3 + sunshine
+        ELSE IF resort = 4 THEN
+            rainfall_total_4 = rainfall_total_4 + rainfall
+            sunshine_total_4 = sunshine_total_4 + sunshine
+        ELSE IF resort = 5 THEN
+            rainfall_total_5 = rainfall_total_5 + rainfall
+            sunshine_total_5 = sunshine_total_5 + sunshine
+        END IF
+        resort = resort + 1
+    END WHILE
+    count = count + 1
+END WHILE
+
+OUTPUT "Average rainfall for resort 1: ", rainfall_total_1 / 365
+OUTPUT "Average rainfall for resort 2: ", rainfall_total_2 / 365
+OUTPUT "Average rainfall for resort 3: ", rainfall_total_3 / 365
+OUTPUT "Average rainfall for resort 4: ", rainfall_total_4 / 365
+OUTPUT "Average rainfall for resort 5: ", rainfall_total_5 / 365
+
+OUTPUT "Average sunshine for resort 1: ", sunshine_total_1 / 365
+OUTPUT "Average sunshine for resort 2: ", sunshine_total_2 / 365
+OUTPUT "Average sunshine for resort 3: ", sunshine_total_3 / 365
+OUTPUT "Average sunshine for resort 4: ", sunshine_total_4 / 365
+OUTPUT "Average sunshine for resort 5: ", sunshine_total_5 / 365
+
+
+
