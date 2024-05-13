@@ -11,11 +11,5 @@ def main(choice):
         main(choice)
 
 
-    
 choice = input("Do you want to append data to the file? (1/-1), (y/n)): ")
 main(choice)
-
-
-
-
-        
