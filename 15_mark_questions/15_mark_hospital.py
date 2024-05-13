@@ -26,3 +26,5 @@ def hospital(patient_num, pulse = True, temp = True):
         print("Temperature and pulse out of range")
 
 hospital(patient_num)
+
+

@@ -76,6 +76,20 @@ OUTPUT "Average sunshine for resort 2: ", sunshine_total_2 / 365
 OUTPUT "Average sunshine for resort 3: ", sunshine_total_3 / 365
 OUTPUT "Average sunshine for resort 4: ", sunshine_total_4 / 365
 OUTPUT "Average sunshine for resort 5: ", sunshine_total_5 / 365
+----------------------------------------------------------------------------------------------------------------
+DECLARE list: ARRAY[1:10] OF INTEGER
+DECLARE count: INTEGER
+DECLARE list: INTEGER
+
+FOR count <- 1 TO 10
+    INPUT list[count]
+END FOR
+
+FOR count <- 1 TO 10
+    OUTPUT list[count]
+END FOR
+----------------------------------------------------------------------------------------------------------------
+
 
 
 
