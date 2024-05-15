@@ -3,6 +3,7 @@ import random
 map = [[0 for _ in range(12)] for _ in range(12)]
 comp_guess = [random.randint(0, 11), random.randint(0, 11)]
 
+
 def play():
     guess = 0
     while guess < 5:
@@ -23,5 +24,6 @@ def play():
                 y_diff *= -1
             print(f"Distance from the treasure: {x_diff + y_diff}")
             guess += 1
+
 
 play()
