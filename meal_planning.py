@@ -1,4 +1,5 @@
-mealSchedule = [["" for i in range(3)]for y in range(7)]
+mealSchedule = [["" for i in range(3)] for y in range(7)]
+
 
 def add_meal():
     for meal in mealSchedule:
@@ -14,13 +15,19 @@ def display_schedule():
         print(f"Breakfast: {mealSchedule[i][0]}")
         print(f"Lunch: {mealSchedule[i][1]}")
         print(f"Dinner: {mealSchedule[i][2]}")
-        
+
+
 def change_meal():
     day = int(input("Enter the day you would like to change the meal for: "))
-    meal = int(input("Enter the meal you would like to change (1 for breakfast, 2 for lunch, 3 for dinner): "))
+    meal = int(
+        input(
+            "Enter the meal you would like to change (1 for breakfast, 2 for lunch, 3 for dinner): "
+        )
+    )
     new_meal = input("Enter the new meal: ")
-    mealSchedule[day-1][meal-1] = new_meal
-    
+    mealSchedule[day - 1][meal - 1] = new_meal
+
+
 def start():
     while True:
         print("1. Add meal")
@@ -38,5 +45,6 @@ def start():
             break
         else:
             print("Invalid choice, please try again.")
-            
+
+
 start()
