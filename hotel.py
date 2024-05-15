@@ -16,8 +16,8 @@ def add_guest():
         room_type = int(input("Enter the room type (1 for single, 2 for double, 3 for suite): "))
         print(f"Price for {room_type} room is: {price[room_type-1]}")
         print(f"Price for {nights} nights in a {room_type} room is: {price[room_type-1]*nights}")
-        Guests.append(guest_name)
-        Bookings.append([guest_name, nights, room_type])
+        Guests[i] = guest_name
+        Bookings[i] = [guest_name, nights, room_type]
         print("Guest added successfully.")
         
 add_guest()
