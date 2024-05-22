@@ -117,6 +117,36 @@ FOR i <- 2 TO 30
 NEXT i
 
 OUTPUT "The student with the highest average score is ", topStudent, " with a score of ", maxAverage
+----------------------------------------------------------------------------------------------------------------
+DECLARE num: INTEGER
+
+FUNCTION convert(mile: REAL) : REAL
+    DECLARE km: REAL
+    km <- mile * 1.6
+    RETURN km
+END FUNCTION
+
+INPUT num
+OUTPUT convert(num)
+----------------------------------------------------------------------------------------------------------------
+DECLARE num1: INTEGER
+DECLARE num2: INTEGER
+DECLARE result: REAL
+
+FUNCTION divide(a: INTEGER, b: INTEGER) : STRING
+    IF a MOD b = 0 THEN
+        RETURN a," can be divided by ", b
+    ELSE
+        RETURN a," cannot be divided by ", b
+    END IF
+END FUNCTION
+
+INPUT num1
+INPUT num2
+
+OUTPUT divide(num1, num2)
+----------------------------------------------------------------------------------------------------------------
+
 
 
 
