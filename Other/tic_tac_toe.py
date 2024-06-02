@@ -1,8 +1,10 @@
 import pandas
 
-board = [[0, 0, 0],
-         [0, 0, 0],
-         [0, 0, 0]]
+win_message = 
+
+board = [[*, *, *],
+         [*, *, *],
+         [*, *, *]]
 
 def print_board():
     df = pandas.DataFrame(board)
@@ -12,7 +14,7 @@ def print_board():
 def check_winner():
     # Check rows
     for row in board:
-        if row[0] == row[1] == row[2] and row[0] != 0:
+        if row[0] == row[1] == row[2] and row[0] != *:
             return row[0]
 
     # Check columns
