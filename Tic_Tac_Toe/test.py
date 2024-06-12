@@ -1,18 +1,21 @@
-import pandas as pd
 import sys
-        
-game = [[" ","|"," ","|"," "], 
-        ["--", "--", "--", "--", "--"],
-        [" ","|", " ","|"," "],
-        ["--", "--", "--", "--", "--"],
-        [" ","|"," ","|"," "]]
+
+import pandas as pd
+
+game = [
+    [" ", "|", " ", "|", " "],
+    ["--", "--", "--", "--", "--"],
+    [" ", "|", " ", "|", " "],
+    ["--", "--", "--", "--", "--"],
+    [" ", "|", " ", "|", " "],
+]
+
 
 def print_game():
     df = pd.DataFrame(game)
     print(df)
-        
 
-       
+
 def check_winner():
     if game[0][0] == game[0][2] == game[0][4] == "X":
         print_game()
@@ -78,15 +81,30 @@ def check_winner():
         print_game()
         print("Player 2 wins")
         return True
-    if not (game[0][0] and game[0][2] and game[0][4] and game[2][0] and game[2][2] and game[2][4] and game[4][0] and game[4][2] and game[4][4]) == " ":
+    if (
+        not (
+            game[0][0]
+            and game[0][2]
+            and game[0][4]
+            and game[2][0]
+            and game[2][2]
+            and game[2][4]
+            and game[4][0]
+            and game[4][2]
+            and game[4][4]
+        )
+        == " "
+    ):
         print_game()
         print("It's a tie")
-        
+
+
 def end_game():
     if check_winner() == True:
         print("Game Over")
         sys.exit()
-    
+
+
 def turn():
     print_game()
     print("------------------------------------------")
@@ -97,13 +115,13 @@ def turn():
         game[row][column] = "X"
         check_winner()
         end_game()
-    else:  
+    else:
         print("That spot is already taken")
         turn()
     print("------------------------------------------")
     print_game()
     print("------------------------------------------")
-    print ("Player 2, it's your turn")
+    print("Player 2, it's your turn")
     row = int(input("Enter the row: "))
     column = int(input("Enter the column: "))
     if game[row][column] == " ":
@@ -116,20 +134,13 @@ def turn():
     print("------------------------------------------")
     print_game()
     print("------------------------------------------")
-    
 
 
-    
 def main():
     while True:
         turn()
-        
-        
 
 
-        
-        
 main()
 
-
-#024
+# 024
