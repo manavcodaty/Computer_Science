@@ -20,8 +20,10 @@ def start_p1():
     print("Enter the coordinates for the small ship")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -37,8 +39,10 @@ def start_p1():
     print("Enter the coordinates for the medium ship")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -54,8 +58,10 @@ def start_p1():
     print("Enter the coordinates for the large ship")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -71,8 +77,10 @@ def start_p1():
     print("Enter the coordinates for the air craft carrier")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -92,8 +100,10 @@ def start_p2():
     print("Enter the coordinates for the small ship")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -108,9 +118,11 @@ def start_p2():
 
     print("Enter the coordinates for the medium ship")
     print("Enter the x coordinate")
-    x = int(input())
+    x = int(input()) 
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -126,8 +138,10 @@ def start_p2():
     print("Enter the coordinates for the large ship")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -143,8 +157,10 @@ def start_p2():
     print("Enter the coordinates for the air craft carrier")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     print("Enter the orientation")
     print("1. Vertical")
     print("2. Horizontal")
@@ -162,8 +178,10 @@ def play_p1():
     print("Player 1, enter the coordinates to attack")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     
     if p2_board[x][y] == "S":
         print("You hit the small ship")
@@ -204,15 +222,15 @@ def play_p1():
     """         
           
     
-   
-    
 def play_p2():
     
     print("Player 2, enter the coordinates to attack")
     print("Enter the x coordinate")
     x = int(input())
+    x =- 1
     print("Enter the y coordinate")
     y = int(input())
+    y =- 1
     
     if p1_board[x][y] == "S":
         print("You hit the small ship")
@@ -271,5 +289,6 @@ def main():
             print("Player 2 has won")
         else:
             play_p1() 
+
 
 main()
