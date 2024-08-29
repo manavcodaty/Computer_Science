@@ -1,3 +1,5 @@
+#Battle ships game
+
 import pandas as pd
 
 p1_board = [[" "] * 10] * 10
