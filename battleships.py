@@ -1,4 +1,4 @@
-#Battle ships game
+#Battle ships game by Manav and Harvey
 
 import pandas as pd
 
