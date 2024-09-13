@@ -50,3 +50,5 @@ def main():
         encrypt()
     else:
         decrypt()
+        
+main()
