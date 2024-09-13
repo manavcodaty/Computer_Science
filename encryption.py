@@ -13,7 +13,6 @@ def encrypt():
 
     for i in range(len(word)):
         char = word[i]
-        char = char.lower()
         char = chr(ord(char) + shift)
         encrypted_word += char
         
