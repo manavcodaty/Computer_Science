@@ -48,25 +48,42 @@ class World:
         
         # Game elements
         self.pokemon_list = [
-            # Forest Pokemon
-            Pokemon("Pidgey", 0.3, "forest"),
-            Pokemon("Caterpie", 0.3, "forest"),
-            Pokemon("Weedle", 0.3, "forest"),
-            Pokemon("Bulbasaur", 0.05, "forest"),
+            Pokemon("Pidgey", 0.4, "forest"),
+            Pokemon("Caterpie", 0.4, "forest"),
+            Pokemon("Weedle", 0.4, "forest"),
+            Pokemon("Bulbasaur", 0.15, "forest"),
+            Pokemon("Scyther", 0.2, "forest"),
+            Pokemon("Pinsir", 0.2, "forest"),
+            Pokemon("Heracross", 0.15, "forest"),
+            Pokemon("Butterfree", 0.2, "forest"),
+            
             # Grass Pokemon
-            Pokemon("Rattata", 0.3, "grass"),
-            Pokemon("Oddish", 0.2, "grass"),
-            Pokemon("Bellsprout", 0.2, "grass"),
-            Pokemon("Pikachu", 0.05, "grass"),
+            Pokemon("Rattata", 0.4, "grass"),
+            Pokemon("Oddish", 0.3, "grass"),
+            Pokemon("Bellsprout", 0.3, "grass"),
+            Pokemon("Pikachu", 0.15, "grass"),
+            Pokemon("Tangela", 0.2, "grass"),
+            Pokemon("Chikorita", 0.15, "grass"),
+            Pokemon("Sunkern", 0.2, "grass"),
+            Pokemon("Hoppip", 0.3, "grass"),
+            
             # Water Pokemon
-            Pokemon("Magikarp", 0.4, "water"),
-            Pokemon("Psyduck", 0.2, "water"),
-            Pokemon("Poliwag", 0.2, "water"),
-            Pokemon("Squirtle", 0.05, "water"),
-            # Rare Pokemon
-            Pokemon("Charizard", 0.01, "all"),
-            Pokemon("Dragonite", 0.01, "all"),
-            Pokemon("Mewtwo", 0.001, "all")
+            Pokemon("Magikarp", 0.5, "water"),
+            Pokemon("Psyduck", 0.3, "water"),
+            Pokemon("Poliwag", 0.3, "water"),
+            Pokemon("Squirtle", 0.15, "water"),
+            Pokemon("Staryu", 0.2, "water"),
+            Pokemon("Goldeen", 0.3, "water"),
+            Pokemon("Totodile", 0.15, "water"),
+            Pokemon("Marill", 0.2, "water"),
+            
+            # Rare Pokemon (increased rates)
+            Pokemon("Charizard", 0.03, "all"),
+            Pokemon("Dragonite", 0.03, "all"),
+            Pokemon("Mewtwo", 0.01, "all"),
+            Pokemon("Mew", 0.01, "all"),
+            Pokemon("Celebi", 0.01, "all"),
+            Pokemon("Lugia", 0.01, "all")
         ]
         self.inventory: List[Pokemon] = []
         self.map = self.generate_map()
