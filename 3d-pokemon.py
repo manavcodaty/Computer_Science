@@ -31,11 +31,11 @@ class Pokemon3D:
         self.world_map = self.generate_map()
         self.wall_scale = 0.5
         self.textures = {
-            'T': '█',  # Tree
-            '~': '≈',  # Water
-            '.': '·',  # Grass
-            '*': '❀',  # Flower
-            '#': '▒',  # Wall
+            'T': random.choice(['⍋', '⎳', '⏉', '⏇']),  # Various tree shapes
+            '~': '≈',                                    # Water
+            '.': '·',                                    # Grass
+            '*': '❀',                                    # Flower
+            '#': random.choice(['▓', '▒', '░', '█']),    # Textured wall variations
         }
         self.depth = 16.0
         self.running = True
