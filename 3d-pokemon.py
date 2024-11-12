@@ -16,7 +16,7 @@ class Player:
         self.x = x
         self.y = y
         self.angle = 0
-        self.FOV = math.pi / 3  # 60 degrees
+        
         self.move_speed = 0.1
         self.turn_speed = 0.1
 
@@ -26,8 +26,10 @@ class Pokemon3D:
         self.map_height = map_height
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.FOV = math.pi / 3  # 60 degrees
         self.player = Player(map_width/2, map_height/2)
         self.world_map = self.generate_map()
+        self.wall_scale = 0.5
         self.textures = {
             'T': '█',  # Tree
             '~': '≈',  # Water
@@ -86,27 +88,37 @@ class Pokemon3D:
         return ray
 
     def render_frame(self):
+        # ANSI color codes
+        BLUE = '\033[34m'      # Sky
+        GREEN = '\033[32m'     # Ground
+        WHITE = '\033[37m'     # Walls close
+        GRAY = '\033[90m'      # Walls far
+        RESET = '\033[0m'      # Reset color
+
         frame = []
         for y in range(self.screen_height):
             row = []
             for x in range(self.screen_width):
-                ray_angle = self.player.angle - self.player.FOV/2 + (x/self.screen_width) * self.player.FOV
+                # Calculate ray angle
+                ray_angle = (self.player.angle - self.FOV/2) + (x/self.screen_width) * self.FOV
                 ray = self.cast_ray(ray_angle)
                 
                 # Calculate wall height
-                wall_height = (self.screen_height / ray.distance) if ray.distance > 0 else self.screen_height
-                ceiling = int((self.screen_height - wall_height) / 2)
-                floor = self.screen_height - ceiling
-                
+                wall_height = (self.screen_height/ray.distance) * self.wall_scale
+                ceiling = (self.screen_height - wall_height) // 2
+                floor = ceiling + wall_height
+
                 if y < ceiling:
-                    char = ' '  # Sky
+                    char = BLUE + '·' + RESET  # Sky
                 elif y > floor:
-                    char = ':'  # Ground
+                    char = GREEN + ':' + RESET  # Ground
                 else:
-                    char = self.textures.get(ray.wall_type, '#')
+                    base_char = self.textures.get(ray.wall_type, '#')
                     # Add distance shading
                     if ray.distance > self.depth/2:
-                        char = '▒' if char == '█' else '.'
+                        char = GRAY + ('▒' if base_char == '█' else '.') + RESET
+                    else:
+                        char = WHITE + base_char + RESET
                 
                 row.append(char)
             frame.append(''.join(row))
