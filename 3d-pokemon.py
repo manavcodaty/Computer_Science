@@ -3,6 +3,16 @@ import os
 import random
 import time
 from typing import List, Tuple
+from dataclasses import dataclass
+import random
+
+@dataclass
+class Pokemon:
+    name: str
+    x: float
+    y: float
+    catch_rate: float  # 0.0 to 1.0
+    symbol: str = '◉'  # Pokemon appearance on map
 
 class Ray:
     def __init__(self, angle: float):
@@ -16,10 +26,39 @@ class Player:
         self.x = x
         self.y = y
         self.angle = 0
-        
+        self.wild_pokemon = []
+        self.caught_pokemon = []
+        self.spawn_pokemon(3)  # Spawn 3 initial Pokemon
         self.move_speed = 0.1
         self.turn_speed = 0.1
-
+        
+    def spawn_pokemon(self, count: int):
+        pokemon_types = [
+            ('Pikachu', 0.3),
+            ('Charmander', 0.4),
+            ('Bulbasaur', 0.5),
+            ('Squirtle', 0.4)
+        ]
+        
+        for _ in range(count):
+            name, catch_rate = random.choice(pokemon_types)
+            x = random.uniform(1, self.map_width - 1)
+            y = random.uniform(1, self.map_height - 1)
+            self.wild_pokemon.append(Pokemon(name, x, y, catch_rate))
+            
+    def try_catch_pokemon(self):
+        for pokemon in self.wild_pokemon:
+            distance = math.sqrt((self.player.x - pokemon.x)**2 + 
+                               (self.player.y - pokemon.y)**2)
+            
+            if distance < 1.5:  # Close enough to try catching
+                if random.random() < pokemon.catch_rate:
+                    self.caught_pokemon.append(pokemon)
+                    self.wild_pokemon.remove(pokemon)
+                    return f"Caught {pokemon.name}!"
+                return f"{pokemon.name} broke free!"
+        return "No Pokemon nearby!"
+    
 class Pokemon3D:
     def __init__(self, map_width: int = 20, map_height: int = 15, screen_width: int = 80, screen_height: int = 24):
         self.map_width = map_width
