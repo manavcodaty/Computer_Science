@@ -1,4 +1,10 @@
+<<<<<<< HEAD:Other/battleships.py
 import pandas as pd
+=======
+#Battle ships game by Manav and Harvey
+
+# import pandas as pd
+>>>>>>> 4cdf2d6 (Refactor tic_tac_tie.py, battleships.py, and encryption.py to clean up imports and ensure main function execution is properly formatted):battleships.py
 
 p1_board = [[" "] * 10] * 10
 p2_board = [[" "] * 10] * 10

@@ -1,8 +1,11 @@
-import pandas as pd
 import random
 import sys
 
+import pandas as pd
+
 arr = [[0,0,0], [0,0,0], [0,0,0]]
+
+
 
 def validation(row, col):
     if row > 2 or col > 2:

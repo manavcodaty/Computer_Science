@@ -39,7 +39,11 @@ def decrypt():
     print("The decrypted word is: ", decrypted_word)
     time.sleep(2)
     main()
+<<<<<<< HEAD:Other/encryption.py
 
+=======
+    
+>>>>>>> 4cdf2d6 (Refactor tic_tac_tie.py, battleships.py, and encryption.py to clean up imports and ensure main function execution is properly formatted):encryption.py
 
 def main():
     print("1. Encrypt")
@@ -50,6 +54,10 @@ def main():
         encrypt()
     else:
         decrypt()
+<<<<<<< HEAD:Other/encryption.py
 
 
+=======
+        
+>>>>>>> 4cdf2d6 (Refactor tic_tac_tie.py, battleships.py, and encryption.py to clean up imports and ensure main function execution is properly formatted):encryption.py
 main()
