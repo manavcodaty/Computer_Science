@@ -4,8 +4,9 @@ import sys
 import time
 import tty
 import termios
+import subprocess
 
-# List of fake hacking messages
+# Fake hacking messages
 MESSAGES = [
     "ACCESS GRANTED...",
     "Brute force attack initiated...",
@@ -27,7 +28,7 @@ MESSAGES = [
 COLORS = ["\033[91m", "\033[92m", "\033[93m", "\033[94m", "\033[95m", "\033[96m", "\033[97m"]
 RESET = "\033[0m"
 
-# Clear the terminal
+# Clear screen
 def clear_screen():
     os.system("clear" if os.name == "posix" else "cls")
 
@@ -36,40 +37,45 @@ def hide_cursor():
     sys.stdout.write("\033[?25l")
     sys.stdout.flush()
 
-# Show cursor (for when exiting)
+# Show cursor (for exiting)
 def show_cursor():
     sys.stdout.write("\033[?25h")
+    sys.stdout.flush()
+
+# Beep randomly
+def beep():
+    sys.stdout.write("\a")
     sys.stdout.flush()
 
 # Stream fake hacking text
 def stream_text(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
-        color = random.choice(COLORS)
-        print(color + random.choice(MESSAGES) + RESET)
-        time.sleep(random.uniform(0.1, 0.3))
+        print(random.choice(COLORS) + random.choice(MESSAGES) + RESET)
+        time.sleep(random.uniform(0.03, 0.1))  # Ultra-fast output
 
-# Flashing screen effect
+# Flashing effect (super fast)
 def flash_screen(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
-        color_code = random.randint(40, 47)  # Background color codes (ANSI)
-        sys.stdout.write(f"\033[{color_code}m\033[2J")  # Change background & clear screen
+        color_code = random.randint(40, 47)  # Background color
+        sys.stdout.write(f"\033[{color_code}m\033[2J")
         sys.stdout.flush()
-        time.sleep(0.1)
+        beep()
+        time.sleep(0.02)  # Extremely fast flickering
 
-# Chaotic text stream
+# Chaotic ultra-fast text stream
 def chaotic_stream(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
-        color = random.choice(COLORS)
-        text = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()", k=random.randint(20, 40)))
-        print(color + text + RESET)
-        time.sleep(random.uniform(0.05, 0.2))
+        print(random.choice(COLORS) + "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()", k=100)) + RESET)
+        beep()
+        time.sleep(random.uniform(0.01, 0.03))  # Insanely fast
 
-# Fake shutdown sequence
+# Fake shutdown with glitching text
 def fake_shutdown():
     clear_screen()
+    time.sleep(1)
     print("\033[91mSystem Error Detected...\033[0m")
     time.sleep(1)
     print("\033[91mShutting down in 3...\033[0m")
@@ -88,39 +94,46 @@ def lockout():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
-        tty.setraw(fd)  # Disable normal keyboard input handling
+        tty.setraw(fd)  # Disable normal keyboard input
         hide_cursor()
         while True:
             time.sleep(1)  # Keep running indefinitely
     except KeyboardInterrupt:
         show_cursor()
         sys.stdout.write("\033[0m\033[2J")  # Reset terminal colors
-        print("\n\033[91m[ABORTED] Emergency Shut Down.\033[0m")
         sys.exit(0)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-# Main function
+# Relaunch script in a new fullscreen terminal window
+def relaunch():
+    if os.name == "posix":  # macOS/Linux
+        subprocess.Popen(["osascript", "-e", 'tell application "Terminal" to do script "tput civis; python3 ' + sys.argv[0] + ' && exit"'])
+    sys.exit(0)
+
+# Main function (loops forever)
 def main():
-    clear_screen()
-    print("\033[92mInitializing hack...\nPress CTRL+C to abort.\033[0m")
-    time.sleep(3)
+    while True:
+        clear_screen()
+        time.sleep(3)
 
-    # Normal hacking messages (7 sec)
-    stream_text(7)
+        # Normal hacking messages (10 sec)
+        stream_text(10)
 
-    # Flashing effect (5 sec)
-    flash_screen(5)
+        # Flashing effect (5 sec)
+        flash_screen(5)
 
-    # Chaotic text stream (6 sec)
-    chaotic_stream(6)
+        # Chaotic text stream (6 sec)
+        chaotic_stream(6)
 
-    # Fake shutdown
-    fake_shutdown()
+        # Fake shutdown
+        fake_shutdown()
 
-    # Enter lockout mode (User can't exit except Ctrl+C)
-    lockout()
+        # Lock the user out
+        lockout()
 
-# Run main function
-if __name__ == "__main__":
+# Start in a new fullscreen window
+if len(sys.argv) == 1:
+    relaunch()
+else:
     main()
