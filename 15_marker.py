@@ -2,12 +2,10 @@ import os
 import random
 import sys
 import time
-import tkinter as tk
-import threading
-import termios
 import tty
+import termios
 
-# Hacking messages
+# List of fake hacking messages
 MESSAGES = [
     "ACCESS GRANTED...",
     "Brute force attack initiated...",
@@ -25,48 +23,53 @@ MESSAGES = [
     "Erasing master boot record...",
 ]
 
-# Terminal colors
-COLORS = ["red", "green", "blue", "yellow", "purple", "cyan", "white"]
+# Terminal colors (ANSI escape codes)
+COLORS = ["\033[91m", "\033[92m", "\033[93m", "\033[94m", "\033[95m", "\033[96m", "\033[97m"]
+RESET = "\033[0m"
+
+# Clear the terminal
+def clear_screen():
+    os.system("clear" if os.name == "posix" else "cls")
 
 # Hide cursor
-def disable_cursor():
-    os.system("xsetroot -cursor empty")  # Hides cursor forever
+def hide_cursor():
+    sys.stdout.write("\033[?25l")
+    sys.stdout.flush()
 
-# Restore cursor on exit
-def restore_cursor():
-    os.system("xsetroot -cursor default")  # Restores cursor
+# Show cursor (for when exiting)
+def show_cursor():
+    sys.stdout.write("\033[?25h")
+    sys.stdout.flush()
 
-# Play random beeping noises
-def play_noise():
-    while True:
-        time.sleep(random.uniform(0.5, 3))
-        os.system("osascript -e 'beep'")
+# Stream fake hacking text
+def stream_text(duration):
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        color = random.choice(COLORS)
+        print(color + random.choice(MESSAGES) + RESET)
+        time.sleep(random.uniform(0.02, 0.05))
 
-# Create fullscreen, unclosable window
-def create_window():
-    root = tk.Tk()
-    root.configure(bg="black")
-    root.attributes("-fullscreen", True)  # Fullscreen
-    root.protocol("WM_DELETE_WINDOW", lambda: None)  # Disable closing
-    root.bind("<Escape>", lambda e: None)  # Block Esc key
+# Flashing screen effect
+def flash_screen(duration):
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        color_code = random.randint(40, 47)  # Background color codes (ANSI)
+        sys.stdout.write(f"\033[{color_code}m\033[2J")  # Change background & clear screen
+        sys.stdout.flush()
+        time.sleep(0.05)
 
-    text = tk.Label(root, text="", font=("Courier", 20), fg="green", bg="black")
-    text.pack(expand=True)
+# Chaotic text stream
+def chaotic_stream(duration):
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        color = random.choice(COLORS)
+        text = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()", k=random.randint(20, 40)))
+        print(color + text + RESET)
+        time.sleep(random.uniform(0.02, 0.05))
 
-    def update_text():
-        while True:
-            text.config(text=random.choice(MESSAGES), fg=random.choice(COLORS))
-            root.update()
-            time.sleep(random.uniform(0.05, 0.2))
-
-    threading.Thread(target=update_text, daemon=True).start()
-
-    root.mainloop()
-
-# Fake shutdown with glitching
+# Fake shutdown sequence
 def fake_shutdown():
-    os.system("clear")
-    time.sleep(1)
+    clear_screen()
     print("\033[91mSystem Error Detected...\033[0m")
     time.sleep(1)
     print("\033[91mShutting down in 3...\033[0m")
@@ -75,67 +78,53 @@ def fake_shutdown():
     time.sleep(1)
     print("\033[91mShutting down in 1...\033[0m")
     time.sleep(1)
-    os.system("clear")
+    clear_screen()
     print("\033[90mSystem Off\033[0m")
-    time.sleep(3)
-    os.system("clear")
+    time.sleep(2)
+    clear_screen()
 
-# Fake BIOS Boot Screen
-def fake_bios():
-    os.system("clear")
-    print("\033[94mAmerican Megatrends Inc.\033[0m")
-    time.sleep(1)
-    print("\033[97mCopyright (C) 2023 All Rights Reserved.\033[0m")
-    time.sleep(1)
-    print("\n\033[92mInitializing Boot Sequence...\033[0m")
-    time.sleep(2)
-    print("\033[96mLoading Kernel...\033[0m")
-    time.sleep(2)
-    print("\033[91mERROR: UNAUTHORIZED ACCESS DETECTED!\033[0m")
-    time.sleep(1)
-    print("\033[91mEntering Emergency BIOS Recovery Mode...\033[0m")
-    time.sleep(2)
-    print("\033[97mFlashing BIOS Firmware...\033[0m")
-    time.sleep(3)
-    print("\033[91mERROR: FIRMWARE CORRUPTED!\033[0m")
-    time.sleep(2)
-    print("\033[93mRebooting System...\033[0m")
-    time.sleep(3)
-    os.system("clear")
-
-# Lock keyboard input (except Ctrl + C)
+# Lockout mode (disable input except Ctrl+C)
 def lockout():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
-        tty.setraw(fd)  # Disable normal keyboard input
+        tty.setraw(fd)  # Disable normal keyboard input handling
+        hide_cursor()
         while True:
-            time.sleep(1)
+            time.sleep(1)  # Keep running indefinitely
     except KeyboardInterrupt:
-        restore_cursor()
-        os.system("clear")
+        show_cursor()
+        sys.stdout.write("\033[0m\033[2J")  # Reset terminal colors
+        print("\n\033[91m[ABORTED] Emergency Shut Down.\033[0m")
         sys.exit(0)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-# Start chaos (running in background threads)
-def start_chaos():
-    disable_cursor()
-    threading.Thread(target=play_noise, daemon=True).start()
-
-    while True:
-        fake_shutdown()
-        fake_bios()
-        time.sleep(10)
-
-# Main program loop, GUI on main thread
 def main():
-    # Create the window on the main thread
-    threading.Thread(target=create_window, daemon=True).start()
-    
-    # Start the chaos in background threads
-    start_chaos()
+    try:
+        while True:  # Add infinite loop
+            clear_screen()
+            print("\033[92mInitializing hack...\n\033[0m")
+            time.sleep(3)
 
-# Run the main function
+            # Normal hacking messages (15 sec)
+            stream_text(15)
+
+            # Flashing effect (5 sec)
+            flash_screen(5)
+
+            # Chaotic text stream (6 sec)
+            chaotic_stream(6)
+
+            # Fake shutdown
+            fake_shutdown()
+
+    except KeyboardInterrupt:
+        show_cursor()
+        sys.stdout.write("\033[0m\033[2J")  # Reset terminal colors
+        print("\n\033[91m[ABORTED] Emergency Shut Down.\033[0m")
+        sys.exit(0)
+
+# Run main function
 if __name__ == "__main__":
     main()
