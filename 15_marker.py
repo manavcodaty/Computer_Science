@@ -2,11 +2,12 @@ import os
 import random
 import sys
 import time
-import tty
+import tkinter as tk
+import threading
 import termios
-import subprocess
+import tty
 
-# Fake hacking messages
+# Hacking messages
 MESSAGES = [
     "ACCESS GRANTED...",
     "Brute force attack initiated...",
@@ -24,57 +25,47 @@ MESSAGES = [
     "Erasing master boot record...",
 ]
 
-# Terminal colors (ANSI escape codes)
-COLORS = ["\033[91m", "\033[92m", "\033[93m", "\033[94m", "\033[95m", "\033[96m", "\033[97m"]
-RESET = "\033[0m"
-
-# Clear screen
-def clear_screen():
-    os.system("clear" if os.name == "posix" else "cls")
+# Terminal colors
+COLORS = ["red", "green", "blue", "yellow", "purple", "cyan", "white"]
 
 # Hide cursor
-def hide_cursor():
-    sys.stdout.write("\033[?25l")
-    sys.stdout.flush()
+def disable_cursor():
+    os.system("xsetroot -cursor empty")  # Hides cursor forever
 
-# Show cursor (for exiting)
-def show_cursor():
-    sys.stdout.write("\033[?25h")
-    sys.stdout.flush()
+# Restore cursor on exit
+def restore_cursor():
+    os.system("xsetroot -cursor default")  # Restores cursor
 
-# Beep randomly
-def beep():
-    sys.stdout.write("\a")
-    sys.stdout.flush()
+# Play random beeping noises
+def play_noise():
+    while True:
+        time.sleep(random.uniform(0.5, 3))
+        os.system("osascript -e 'beep'")
 
-# Stream fake hacking text
-def stream_text(duration):
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        print(random.choice(COLORS) + random.choice(MESSAGES) + RESET)
-        time.sleep(random.uniform(0.03, 0.1))  # Ultra-fast output
+# Create fullscreen, unclosable window
+def create_window():
+    root = tk.Tk()
+    root.configure(bg="black")
+    root.attributes("-fullscreen", True)  # Fullscreen
+    root.protocol("WM_DELETE_WINDOW", lambda: None)  # Disable closing
+    root.bind("<Escape>", lambda e: None)  # Block Esc key
 
-# Flashing effect (super fast)
-def flash_screen(duration):
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        color_code = random.randint(40, 47)  # Background color
-        sys.stdout.write(f"\033[{color_code}m\033[2J")
-        sys.stdout.flush()
-        beep()
-        time.sleep(0.02)  # Extremely fast flickering
+    text = tk.Label(root, text="", font=("Courier", 20), fg="green", bg="black")
+    text.pack(expand=True)
 
-# Chaotic ultra-fast text stream
-def chaotic_stream(duration):
-    start_time = time.time()
-    while time.time() - start_time < duration:
-        print(random.choice(COLORS) + "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()", k=100)) + RESET)
-        beep()
-        time.sleep(random.uniform(0.01, 0.03))  # Insanely fast
+    def update_text():
+        while True:
+            text.config(text=random.choice(MESSAGES), fg=random.choice(COLORS))
+            root.update()
+            time.sleep(random.uniform(0.05, 0.2))
 
-# Fake shutdown with glitching text
+    threading.Thread(target=update_text, daemon=True).start()
+
+    root.mainloop()
+
+# Fake shutdown with glitching
 def fake_shutdown():
-    clear_screen()
+    os.system("clear")
     time.sleep(1)
     print("\033[91mSystem Error Detected...\033[0m")
     time.sleep(1)
@@ -84,56 +75,67 @@ def fake_shutdown():
     time.sleep(1)
     print("\033[91mShutting down in 1...\033[0m")
     time.sleep(1)
-    clear_screen()
+    os.system("clear")
     print("\033[90mSystem Off\033[0m")
-    time.sleep(2)
-    clear_screen()
+    time.sleep(3)
+    os.system("clear")
 
-# Lockout mode (disable input except Ctrl+C)
+# Fake BIOS Boot Screen
+def fake_bios():
+    os.system("clear")
+    print("\033[94mAmerican Megatrends Inc.\033[0m")
+    time.sleep(1)
+    print("\033[97mCopyright (C) 2023 All Rights Reserved.\033[0m")
+    time.sleep(1)
+    print("\n\033[92mInitializing Boot Sequence...\033[0m")
+    time.sleep(2)
+    print("\033[96mLoading Kernel...\033[0m")
+    time.sleep(2)
+    print("\033[91mERROR: UNAUTHORIZED ACCESS DETECTED!\033[0m")
+    time.sleep(1)
+    print("\033[91mEntering Emergency BIOS Recovery Mode...\033[0m")
+    time.sleep(2)
+    print("\033[97mFlashing BIOS Firmware...\033[0m")
+    time.sleep(3)
+    print("\033[91mERROR: FIRMWARE CORRUPTED!\033[0m")
+    time.sleep(2)
+    print("\033[93mRebooting System...\033[0m")
+    time.sleep(3)
+    os.system("clear")
+
+# Lock keyboard input (except Ctrl + C)
 def lockout():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
     try:
         tty.setraw(fd)  # Disable normal keyboard input
-        hide_cursor()
         while True:
-            time.sleep(1)  # Keep running indefinitely
+            time.sleep(1)
     except KeyboardInterrupt:
-        show_cursor()
-        sys.stdout.write("\033[0m\033[2J")  # Reset terminal colors
+        restore_cursor()
+        os.system("clear")
         sys.exit(0)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
-# Relaunch script in a new fullscreen terminal window
-def relaunch():
-    if os.name == "posix":  # macOS/Linux
-        subprocess.Popen(["osascript", "-e", 'tell application "Terminal" to do script "tput civis; python3 ' + sys.argv[0] + ' && exit"'])
-    sys.exit(0)
+# Start chaos (running in background threads)
+def start_chaos():
+    disable_cursor()
+    threading.Thread(target=play_noise, daemon=True).start()
 
-# Main function (loops forever)
-def main():
     while True:
-        clear_screen()
-        time.sleep(3)
-
-        # Normal hacking messages (10 sec)
-        stream_text(10)
-
-        # Flashing effect (5 sec)
-        flash_screen(5)
-
-        # Chaotic text stream (6 sec)
-        chaotic_stream(6)
-
-        # Fake shutdown
         fake_shutdown()
+        fake_bios()
+        time.sleep(10)
 
-        # Lock the user out
-        lockout()
+# Main program loop, GUI on main thread
+def main():
+    # Create the window on the main thread
+    threading.Thread(target=create_window, daemon=True).start()
+    
+    # Start the chaos in background threads
+    start_chaos()
 
-# Start in a new fullscreen window
-if len(sys.argv) == 1:
-    relaunch()
-else:
+# Run the main function
+if __name__ == "__main__":
     main()
