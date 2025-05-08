@@ -15,13 +15,13 @@ COLORS = {
     "reset": "\033[0m",
 }
 
+
 class Pokemon:
     def __init__(self, name: str, rarity: float, habitat: str):
         self.name = name
         self.rarity = rarity
         self.habitat = habitat
         self.caught = False
-
 
 
 class World:
@@ -190,7 +190,6 @@ class World:
         if self.inventory:
             print("Collection: " + ", ".join(p.name for p in self.inventory))
         print("=" * 40)
-    
 
 
 def main():
