@@ -1,0 +1,80 @@
+DECLARE Names[1:5] : STRING
+DECLARE Scores[1:5] : INTEGER
+DECLARE Total : INTEGER
+DECLARE Average : REAL
+
+PROCEDURE OutputResults(Names : ARRAY OF STRING, Scores : ARRAY OF INTEGER, Average : REAL)
+    FOR i ← 1 TO 5
+        OUTPUT Names[i] & " scored " & Scores[i]
+    NEXT i
+    OUTPUT "Average score: " & Average
+ENDPROCEDURE
+
+Total ← 0
+
+FOR i ← 1 TO 5
+    OUTPUT "Enter student name: "
+    INPUT Names[i]
+    OUTPUT "Enter score for " & Names[i] & ": "
+    INPUT Scores[i]
+    Total ← Total + Scores[i]
+NEXT i
+
+Average ← Total / 5
+
+CALL OutputResults(Names, Scores, Average)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+DECLARE MenuItems[1:5] : STRING
+DECLARE Prices[1:5] : REAL
+DECLARE Order[1:10] : STRING
+DECLARE OrderPrices[1:10] : REAL
+DECLARE Choice, Count : INTEGER
+DECLARE Total : REAL
+
+
+MenuItems[1] ← "Burger"
+Prices[1] ← 15.0
+MenuItems[2] ← "Pizza"
+Prices[2] ← 20.0
+MenuItems[3] ← "Pasta"
+Prices[3] ← 18.5
+MenuItems[4] ← "Salad"
+Prices[4] ← 12.0
+MenuItems[5] ← "Fries"
+Prices[5] ← 8.0
+
+Count ← 0
+Total ← 0
+
+
+REPEAT
+    OUTPUT "Menu:"
+    FOR i ← 1 TO 5
+        OUTPUT i & ". " & MenuItems[i] & " - " & Prices[i]
+    NEXT i
+
+    OUTPUT "Enter item number to order (0 to finish): "
+    INPUT Choice
+
+    IF Choice <> 0 THEN
+        Count ← Count + 1
+        Order[Count] ← MenuItems[Choice]
+        OrderPrices[Count] ← Prices[Choice]
+        Total ← Total + Prices[Choice]
+    ENDIF
+UNTIL Choice = 0
+
+
+OUTPUT "Your order:"
+FOR i ← 1 TO Count
+    OUTPUT Order[i] & " - " & OrderPrices[i]
+NEXT i
+
+OUTPUT "Total cost: " & Total
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
