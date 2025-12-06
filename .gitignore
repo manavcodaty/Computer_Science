@@ -1,0 +1,6 @@
+env
+manim_scenes
+media/texts
+media
+__pycache__
+.DS_Store

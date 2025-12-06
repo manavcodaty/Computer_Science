@@ -1,0 +1,18 @@
+
+# Render all scenes (from repo root)
+manim -pqh manim_scenes/stack_manim.py \
+  StackExplainer StackPseudocodeScene BracketMatchingScene CallStackScene
+
+# Concatenate (macOS/Linux)
+printf "file 'media/videos/stack_manim/1080p60/StackExplainer.mp4'\n\
+file 'media/videos/stack_manim/1080p60/StackPseudocodeScene.mp4'\n\
+file 'media/videos/stack_manim/1080p60/BracketMatchingScene.mp4'\n\
+file 'media/videos/stack_manim/1080p60/CallStackScene.mp4'\n" > concat_list.txt && \
+ffmpeg -y -f concat -safe 0 -i concat_list.txt -c copy stacks_full.mp4
+
+# Concatenate (Windows PowerShell)
+Set-Content concat_list.txt "file 'media/videos/stack_manim/1080p60/StackExplainer.mp4'"
+Add-Content concat_list.txt "file 'media/videos/stack_manim/1080p60/StackPseudocodeScene.mp4'"
+Add-Content concat_list.txt "file 'media/videos/stack_manim/1080p60/BracketMatchingScene.mp4'"
+Add-Content concat_list.txt "file 'media/videos/stack_manim/1080p60/CallStackScene.mp4'"
+ffmpeg -y -f concat -safe 0 -i concat_list.txt -c copy stacks_full.mp4
