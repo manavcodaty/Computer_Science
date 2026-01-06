@@ -1,0 +1,52 @@
+[
+  {
+    "capacity": 30,
+    "features": [
+      "projector",
+      "whiteboard"
+    ],
+    "id": "R101",
+    "name": "Room 101",
+    "type": "classroom"
+  },
+  {
+    "capacity": 24,
+    "features": [
+      "pc",
+      "3d-printer"
+    ],
+    "id": "LAB1",
+    "name": "Computer Lab 1",
+    "type": "lab"
+  },
+  {
+    "capacity": 18,
+    "features": [
+      "easels",
+      "sink"
+    ],
+    "id": "STUDIO",
+    "name": "Art Studio",
+    "type": "studio"
+  },
+  {
+    "capacity": 15,
+    "features": [
+      "piano",
+      "sound-system"
+    ],
+    "id": "MUSIC",
+    "name": "Music Room",
+    "type": "studio"
+  },
+  {
+    "capacity": 200,
+    "features": [
+      "stage",
+      "pa-system"
+    ],
+    "id": "HALL",
+    "name": "Assembly Hall",
+    "type": "hall"
+  }
+]

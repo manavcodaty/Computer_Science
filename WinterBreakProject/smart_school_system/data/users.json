@@ -1,0 +1,30 @@
+[
+  {
+    "id": "e6aed35e-0598-484e-905a-0c558dd7c89a",
+    "pin": null,
+    "pin_hash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "role": "admin",
+    "username": "admin"
+  },
+  {
+    "id": "10ec2dd5-60fa-4545-a817-870ff1d23162",
+    "pin": null,
+    "pin_hash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "role": "teacher",
+    "username": "teacher1"
+  },
+  {
+    "id": "50fc2221-b730-480b-bf75-38d8859794ce",
+    "pin": null,
+    "pin_hash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "role": "student",
+    "username": "student1"
+  },
+  {
+    "id": "793845e7-62f0-4472-aa3f-6fb13aa025d1",
+    "pin": null,
+    "pin_hash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "role": "student",
+    "username": "student2"
+  }
+]

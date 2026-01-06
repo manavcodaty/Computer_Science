@@ -1,0 +1,16 @@
+2025-12-14T11:56:04 event=seed_users_created
+2025-12-14T11:56:04 event=seed_rooms_created
+2025-12-14T11:56:04 event=demo_started
+2025-12-14T11:56:04 event=booking_requested user=student1(student)
+2025-12-14T11:56:04 event=waitlist_joined user=student2(student)
+2025-12-14T11:56:04 event=booking_approved user=admin(admin)
+2025-12-14T11:56:04 event=booking_cancelled user=admin(admin)
+2025-12-14T11:56:04 event=waitlist_promoted
+2025-12-14T11:56:04 event=announcement_created user=teacher1(teacher)
+2025-12-14T11:56:04 event=announcement_archived user=teacher1(teacher)
+2025-12-14T11:56:04 event=announcement_unarchived user=teacher1(teacher)
+2025-12-14T11:56:04 event=points_awarded user=teacher1(teacher)
+2025-12-14T11:56:04 event=badge_awarded user=teacher1(teacher)
+2025-12-14T11:56:04 event=state_saved
+2025-12-14T12:46:01 event=login_success user=admin(admin)
+2026-01-05T08:15:51 event=login_success user=admin(admin)

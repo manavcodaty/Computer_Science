@@ -1,0 +1,12 @@
+[
+  {
+    "audience": "all",
+    "body": "Check the noticeboard for updates.",
+    "created_at": "2025-12-14T11:56:04",
+    "created_by": "10ec2dd5-60fa-4545-a817-870ff1d23162",
+    "expires_on": null,
+    "id": "67a5f831-6d22-4412-a4dc-74cb8e2b0215",
+    "status": "active",
+    "title": "Welcome back!"
+  }
+]

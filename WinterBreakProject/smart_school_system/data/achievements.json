@@ -1,0 +1,22 @@
+{
+  "50fc2221-b730-480b-bf75-38d8859794ce": {
+    "badges": [
+      {
+        "awarded_by": "10ec2dd5-60fa-4545-a817-870ff1d23162",
+        "badge_name": "Star Helper",
+        "date": "2025-12-14"
+      }
+    ],
+    "points_log": [
+      {
+        "awarded_by": "10ec2dd5-60fa-4545-a817-870ff1d23162",
+        "category": "participation",
+        "date": "2025-12-14",
+        "note": "Great contributions in class.",
+        "points": 10
+      }
+    ],
+    "student_id": "50fc2221-b730-480b-bf75-38d8859794ce",
+    "total_points": 10
+  }
+}

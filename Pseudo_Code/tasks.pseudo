@@ -151,6 +151,273 @@ DECLARE y: INTEGER
 DECLARE z: INTEGER
 ----------------------------------------------------------------------------------------------------------------
 
+PROGRAM AdaptiveMathQuiz
+
+    // -----------------------------
+    // Cambridge-style pseudocode
+    // -----------------------------
+
+    // ---------- Constants ----------
+    CONST MaxRounds = 3
+    CONST QuestionsPerRound = 5
+    CONST StreakBonusEvery = 3          // bonus when streak hits 3, 6, 9...
+    CONST StreakBonusPoints = 2
+    CONST FastTimeLimit = 5             // seconds for "fast answer" bonus
+    CONST FastBonusPoints = 1
+    CONST MaxDifficulty = 5
+    CONST MinDifficulty = 1
+
+    // ---------- Variables ----------
+    DECLARE Round, Q AS INTEGER
+    DECLARE Difficulty AS INTEGER
+    DECLARE Score AS INTEGER
+    DECLARE Streak AS INTEGER
+    DECLARE CorrectCountRound AS INTEGER
+
+    DECLARE Op AS STRING
+    DECLARE A, B, Answer, UserAnswer AS INTEGER
+    DECLARE StartTime, EndTime, TimeTaken AS REAL
+
+    DECLARE CSVLine AS STRING
+    DECLARE FileName AS STRING
+
+    // ---------- Question bank weights (probabilities) ----------
+    // For simplicity, use ranges on RandomInt(1,100)
+    // Difficulty 1-2: mainly + and -
+    // Difficulty 3: add * sometimes
+    // Difficulty 4-5: include exponents
+
+    // ---------- Setup ----------
+    Score <- 0
+    Streak <- 0
+    Difficulty <- 1
+
+    FileName <- "quiz_log.csv"
+    // Create / overwrite log file and add header
+    OPENFILE FileName FOR WRITE
+    WRITEFILE FileName, "Round,Question,Difficulty,Op,A,B,CorrectAnswer,UserAnswer,Correct,TimeTaken,ScoreAfter"
+    CLOSEFILE FileName
+
+    OUTPUT "Welcome to the Adaptive Math Quiz!"
+    OUTPUT "There are ", MaxRounds, " rounds with ", QuestionsPerRound, " questions each."
+    OUTPUT "Difficulty adapts based on your performance, and streaks give bonus points."
+    OUTPUT ""
+
+    // ---------- Outer loop for rounds ----------
+    FOR Round <- 1 TO MaxRounds
+        OUTPUT "=== ROUND ", Round, " ==="
+        CorrectCountRound <- 0
+
+        // ---------- Inner loop for questions ----------
+        FOR Q <- 1 TO QuestionsPerRound
+
+            // ---- Choose operation by probability + difficulty ----
+            // Pick a number 1..100 and map it to an operation
+            DECLARE R AS INTEGER
+            R <- RANDOMINT(1, 100)
+
+            IF Difficulty <= 2 THEN
+                IF R <= 60 THEN
+                    Op <- "ADD"
+                ELSE
+                    Op <- "SUB"
+                ENDIF
+
+            ELSEIF Difficulty = 3 THEN
+                IF R <= 45 THEN
+                    Op <- "ADD"
+                ELSEIF R <= 75 THEN
+                    Op <- "SUB"
+                ELSE
+                    Op <- "MUL"
+                ENDIF
+
+            ELSE // Difficulty 4 or 5
+                IF R <= 30 THEN
+                    Op <- "ADD"
+                ELSEIF R <= 55 THEN
+                    Op <- "SUB"
+                ELSEIF R <= 85 THEN
+                    Op <- "MUL"
+                ELSE
+                    Op <- "EXP"
+                ENDIF
+            ENDIF
+
+            // ---- Generate numbers based on difficulty and operation ----
+            IF Difficulty = 1 THEN
+                A <- RANDOMINT(1, 10)
+                B <- RANDOMINT(1, 10)
+            ELSEIF Difficulty = 2 THEN
+                A <- RANDOMINT(5, 20)
+                B <- RANDOMINT(5, 20)
+            ELSEIF Difficulty = 3 THEN
+                A <- RANDOMINT(10, 50)
+                B <- RANDOMINT(2, 12)
+            ELSEIF Difficulty = 4 THEN
+                A <- RANDOMINT(20, 100)
+                B <- RANDOMINT(2, 15)
+            ELSE // Difficulty = 5
+                A <- RANDOMINT(50, 200)
+                B <- RANDOMINT(2, 20)
+            ENDIF
+
+            // ---- Compute correct answer + tweak values if needed ----
+            IF Op = "ADD" THEN
+                Answer <- A + B
+                OUTPUT "Q", Q, ": ", A, " + ", B, " = ?"
+
+            ELSEIF Op = "SUB" THEN
+                // ensure non-negative result for easier checking
+                IF B > A THEN
+                    DECLARE Temp AS INTEGER
+                    Temp <- A
+                    A <- B
+                    B <- Temp
+                ENDIF
+                Answer <- A - B
+                OUTPUT "Q", Q, ": ", A, " - ", B, " = ?"
+
+            ELSEIF Op = "MUL" THEN
+                Answer <- A * B
+                OUTPUT "Q", Q, ": ", A, " * ", B, " = ?"
+
+            ELSE // EXP
+                // For exponents, keep numbers smaller
+                A <- RANDOMINT(2, 9)
+                IF Difficulty = 4 THEN
+                    B <- RANDOMINT(2, 3)
+                ELSE
+                    B <- RANDOMINT(2, 4)
+                ENDIF
+                Answer <- A ^ B
+                OUTPUT "Q", Q, ": ", A, " ^ ", B, " = ?"
+            ENDIF
+
+            // ---- Timer start ----
+            StartTime <- TIME
+
+            // ---- Get answer ----
+            INPUT UserAnswer
+
+            // ---- Timer end ----
+            EndTime <- TIME
+            TimeTaken <- EndTime - StartTime
+
+            // ---- Check correctness (selection) ----
+            DECLARE Correct AS BOOLEAN
+            IF UserAnswer = Answer THEN
+                Correct <- TRUE
+            ELSE
+                Correct <- FALSE
+            ENDIF
+
+            // ---- Score, streak, hints, difficulty changes ----
+            IF Correct = TRUE THEN
+                OUTPUT "✅ Correct!"
+                Score <- Score + (Difficulty * 2)      // harder gives more points
+                Streak <- Streak + 1
+                CorrectCountRound <- CorrectCountRound + 1
+
+                // fast bonus
+                IF TimeTaken <= FastTimeLimit THEN
+                    OUTPUT "⚡ Fast bonus +", FastBonusPoints
+                    Score <- Score + FastBonusPoints
+                ENDIF
+
+                // streak bonus
+                IF (Streak MOD StreakBonusEvery) = 0 THEN
+                    OUTPUT "🔥 Streak bonus +", StreakBonusPoints
+                    Score <- Score + StreakBonusPoints
+                ENDIF
+
+                // small difficulty increase for correct answers
+                IF Difficulty < MaxDifficulty THEN
+                    Difficulty <- Difficulty + 1
+                ENDIF
+
+            ELSE
+                OUTPUT "❌ Incorrect. The correct answer was: ", Answer
+                Streak <- 0
+
+                // targeted hints based on operation (selection)
+                IF Op = "ADD" THEN
+                    OUTPUT "Hint: Addition combines quantities. Try adding tens then ones."
+                ELSEIF Op = "SUB" THEN
+                    OUTPUT "Hint: Subtraction is difference. Check you didn't swap the numbers."
+                ELSEIF Op = "MUL" THEN
+                    OUTPUT "Hint: Multiplication is repeated addition. Use times tables or splitting."
+                ELSE
+                    OUTPUT "Hint: Exponents mean repeated multiplication (e.g., 2^3 = 2*2*2)."
+                ENDIF
+
+                // penalty + difficulty decrease on incorrect
+                Score <- Score - 1
+                IF Score < 0 THEN
+                    Score <- 0
+                ENDIF
+
+                IF Difficulty > MinDifficulty THEN
+                    Difficulty <- Difficulty - 1
+                ENDIF
+            ENDIF
+
+            OUTPUT "Current score: ", Score
+            OUTPUT "Current difficulty: ", Difficulty
+            OUTPUT ""
+
+            // ---- CSV log line (extension) ----
+            // Round,Question,Difficulty,Op,A,B,CorrectAnswer,UserAnswer,Correct,TimeTaken,ScoreAfter
+            CSVLine <- ""
+            CSVLine <- CSVLine & Round & ","
+            CSVLine <- CSVLine & Q & ","
+            CSVLine <- CSVLine & Difficulty & ","
+            CSVLine <- CSVLine & Op & ","
+            CSVLine <- CSVLine & A & ","
+            CSVLine <- CSVLine & B & ","
+            CSVLine <- CSVLine & Answer & ","
+            CSVLine <- CSVLine & UserAnswer & ","
+            IF Correct THEN
+                CSVLine <- CSVLine & "1,"
+            ELSE
+                CSVLine <- CSVLine & "0,"
+            ENDIF
+            CSVLine <- CSVLine & TimeTaken & ","
+            CSVLine <- CSVLine & Score
+
+            OPENFILE FileName FOR APPEND
+            WRITEFILE FileName, CSVLine
+            CLOSEFILE FileName
+
+        NEXT Q
+
+        // ---- Round summary and adaptive adjustment (selection) ----
+        OUTPUT "Round ", Round, " complete."
+        OUTPUT "You got ", CorrectCountRound, " out of ", QuestionsPerRound, " correct."
+
+        IF CorrectCountRound >= 4 THEN
+            OUTPUT "Great round! Difficulty will trend upwards next round."
+            IF Difficulty < MaxDifficulty THEN
+                Difficulty <- Difficulty + 1
+            ENDIF
+        ELSEIF CorrectCountRound <= 2 THEN
+            OUTPUT "Tough round. Difficulty will ease slightly next round."
+            IF Difficulty > MinDifficulty THEN
+                Difficulty <- Difficulty - 1
+            ENDIF
+        ELSE
+            OUTPUT "Nice effort. Difficulty stays about the same."
+        ENDIF
+
+        OUTPUT ""
+
+    NEXT Round
+
+    OUTPUT "=== QUIZ FINISHED ==="
+    OUTPUT "Final score: ", Score
+    OUTPUT "Log saved to: ", FileName
+
+ENDPROGRAM
   
 
 
