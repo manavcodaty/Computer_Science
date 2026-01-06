@@ -37,4 +37,3 @@ def validate_int_in_range(value: str, lo: int, hi: int) -> int:
     if n < lo or n > hi:
         raise ValueError(f"Value must be between {lo} and {hi}.")
     return n
-

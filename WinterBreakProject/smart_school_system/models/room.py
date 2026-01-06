@@ -30,4 +30,3 @@ class Room:
             capacity=int(data["capacity"]),
             features=list(data.get("features", [])),
         )
-

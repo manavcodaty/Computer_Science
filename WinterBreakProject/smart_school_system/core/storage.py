@@ -89,10 +89,34 @@ def ensure_data_files() -> None:
     rooms_raw = load_json(str(rooms_path), [])
     if not users_raw:
         seed_users = [
-            User(id=str(uuid.uuid4()), username="admin", pin_hash=_hash_pin("1234"), pin=None, role="admin"),
-            User(id=str(uuid.uuid4()), username="teacher1", pin_hash=_hash_pin("1234"), pin=None, role="teacher"),
-            User(id=str(uuid.uuid4()), username="student1", pin_hash=_hash_pin("1234"), pin=None, role="student"),
-            User(id=str(uuid.uuid4()), username="student2", pin_hash=_hash_pin("1234"), pin=None, role="student"),
+            User(
+                id=str(uuid.uuid4()),
+                username="admin",
+                pin_hash=_hash_pin("1234"),
+                pin=None,
+                role="admin",
+            ),
+            User(
+                id=str(uuid.uuid4()),
+                username="teacher1",
+                pin_hash=_hash_pin("1234"),
+                pin=None,
+                role="teacher",
+            ),
+            User(
+                id=str(uuid.uuid4()),
+                username="student1",
+                pin_hash=_hash_pin("1234"),
+                pin=None,
+                role="student",
+            ),
+            User(
+                id=str(uuid.uuid4()),
+                username="student2",
+                pin_hash=_hash_pin("1234"),
+                pin=None,
+                role="student",
+            ),
         ]
         save_json(str(users_path), [u.to_dict() for u in seed_users])
         log_event("seed_users_created")
@@ -163,14 +187,19 @@ def load_state() -> AppState:
     waitlists_raw = load_json(str(d / "waitlists.json"), {})
     announcements_raw = load_json(str(d / "announcements.json"), [])
     achievements_raw = load_json(str(d / "achievements.json"), {})
-    badges_raw = load_json(str(d / "badges.json"), ["Star Helper", "Math Whiz", "Perfect Attendance"])
+    badges_raw = load_json(
+        str(d / "badges.json"), ["Star Helper",
+                                 "Math Whiz", "Perfect Attendance"]
+    )
 
     users = {u["id"]: User.from_dict(u) for u in users_raw}
     rooms = {r["id"]: Room.from_dict(r) for r in rooms_raw}
     bookings = [Booking.from_dict(b) for b in bookings_raw]
     waitlists = {k: deque(v) for k, v in waitlists_raw.items()}
     announcements = [Announcement.from_dict(a) for a in announcements_raw]
-    achievements = {sid: AchievementRecord.from_dict(rec) for sid, rec in achievements_raw.items()}
+    achievements = {
+        sid: AchievementRecord.from_dict(rec) for sid, rec in achievements_raw.items()
+    }
 
     return AppState(
         users_by_id=users,
@@ -191,14 +220,21 @@ def load_state() -> AppState:
 
 def save_state(state: AppState) -> None:
     d = _data_dir()
-    save_json(str(d / "users.json"), [u.to_dict() for u in state.users_by_id.values()])
-    save_json(str(d / "rooms.json"), [r.to_dict() for r in state.rooms_by_id.values()])
+    save_json(str(d / "users.json"), [u.to_dict()
+              for u in state.users_by_id.values()])
+    save_json(str(d / "rooms.json"), [r.to_dict()
+              for r in state.rooms_by_id.values()])
     save_json(str(d / "bookings.json"), [b.to_dict() for b in state.bookings])
-    save_json(str(d / "waitlists.json"), {k: list(q) for k, q in state.waitlists.items()})
-    save_json(str(d / "announcements.json"), [a.to_dict() for a in state.announcements])
+    save_json(
+        str(d / "waitlists.json"), {k: list(q)
+                                    for k, q in state.waitlists.items()}
+    )
+    save_json(str(d / "announcements.json"),
+              [a.to_dict() for a in state.announcements])
     save_json(
         str(d / "achievements.json"),
-        {sid: rec.to_dict() for sid, rec in state.achievements_by_student_id.items()},
+        {sid: rec.to_dict()
+         for sid, rec in state.achievements_by_student_id.items()},
     )
     save_json(str(d / "badges.json"), list(state.allowed_badges))
     log_event("state_saved")
@@ -216,13 +252,22 @@ def create_user(state: AppState, username: str, pin: str, role: str) -> None:
         raise ValueError("Invalid role.")
     if any(u.username == username for u in state.users_by_id.values()):
         raise ValueError("Username already exists.")
-    u = User(id=str(uuid.uuid4()), username=username, pin_hash=_hash_pin(pin), pin=None, role=role)
+    u = User(
+        id=str(uuid.uuid4()),
+        username=username,
+        pin_hash=_hash_pin(pin),
+        pin=None,
+        role=role,
+    )
     state.users_by_id[u.id] = u
     log_event("user_created")
 
 
-def add_room(state: AppState, name: str, room_type: str, capacity: int, features: list[str]) -> None:
+def add_room(
+    state: AppState, name: str, room_type: str, capacity: int, features: list[str]
+) -> None:
     rid = f"R{uuid.uuid4().hex[:6].upper()}"
-    r = Room(id=rid, name=name, type=room_type, capacity=capacity, features=features)
+    r = Room(id=rid, name=name, type=room_type,
+             capacity=capacity, features=features)
     state.rooms_by_id[r.id] = r
     log_event("room_added")
