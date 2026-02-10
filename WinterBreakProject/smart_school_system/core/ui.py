@@ -7,4 +7,3 @@ def safe_input(prompt: str) -> str | None:
     except (KeyboardInterrupt, EOFError):
         print()
         return None
-

@@ -1,4 +1,3 @@
-
 """
 Text-Based Shop (CLI)
 - Add items, view basket, apply discounts, checkout
@@ -12,19 +11,19 @@ from pathlib import Path
 
 # ---------- Shop Data ----------
 CATALOG = {
-    "apples":  {"price": 3.00},
-    "bread":   {"price": 4.50},
-    "milk":    {"price": 6.00},
-    "eggs":    {"price": 12.00},
-    "cheese":  {"price": 18.00},
+    "apples": {"price": 3.00},
+    "bread": {"price": 4.50},
+    "milk": {"price": 6.00},
+    "eggs": {"price": 12.00},
+    "cheese": {"price": 18.00},
     "chicken": {"price": 25.00},
 }
 
 PROMO_CODES = {
     # code: percent off (cart-level)
-    "SAVE5":  5,
+    "SAVE5": 5,
     "SAVE10": 10,
-    "VIP15":  15,
+    "VIP15": 15,
 }
 
 SAVE_FILE = Path("basket.json")
@@ -104,7 +103,9 @@ def bogo_apples_discount(basket: dict) -> float:
     return free * unit
 
 
-def cart_percent_discount_options(is_member: bool, promo_code: str, after_item_discounts: float) -> list:
+def cart_percent_discount_options(
+    is_member: bool, promo_code: str, after_item_discounts: float
+) -> list:
     """
     Returns possible cart-level percent discounts (name, percent).
     Tiered discounts approach:
@@ -124,7 +125,9 @@ def cart_percent_discount_options(is_member: bool, promo_code: str, after_item_d
     if promo_code:
         code = promo_code.strip().upper()
         if code in PROMO_CODES:
-            options.append((f"Promo {code} ({PROMO_CODES[code]}% off)", PROMO_CODES[code]))
+            options.append(
+                (f"Promo {code} ({PROMO_CODES[code]}% off)", PROMO_CODES[code])
+            )
         else:
             options.append(("Invalid promo code (0%)", 0))
 
@@ -149,7 +152,8 @@ def calculate_bill(basket: dict, is_member: bool, promo_code: str) -> dict:
     after_item_discounts = max(0.0, subtotal - bogo_discount)
 
     # Tiered cart discounts: choose BEST single percent discount
-    options = cart_percent_discount_options(is_member, promo_code, after_item_discounts)
+    options = cart_percent_discount_options(
+        is_member, promo_code, after_item_discounts)
     best_name, best_percent = max(options, key=lambda x: x[1])
 
     cart_discount = after_item_discounts * (best_percent / 100.0)
@@ -257,14 +261,18 @@ def main():
 
         elif choice == "5":
             is_member = read_yes_no("Are you a member? (y/n): ")
-            print("✅ Member status set to:", "MEMBER" if is_member else "NON-MEMBER")
+            print("✅ Member status set to:",
+                  "MEMBER" if is_member else "NON-MEMBER")
 
         elif choice == "6":
-            promo_code = input("Enter promo code (or blank to clear): ").strip().upper()
+            promo_code = input(
+                "Enter promo code (or blank to clear): ").strip().upper()
             if promo_code == "":
                 print("✅ Promo code cleared.")
             elif promo_code in PROMO_CODES:
-                print(f"✅ Promo code applied: {promo_code} ({PROMO_CODES[promo_code]}% off)")
+                print(
+                    f"✅ Promo code applied: {promo_code} ({PROMO_CODES[promo_code]}% off)"
+                )
             else:
                 print("⚠️ Promo code not recognized (will count as invalid).")
 
@@ -276,7 +284,8 @@ def main():
             print("\n--- Bill Breakdown ---")
             print(f"Subtotal:              {bill['subtotal']:.2f}")
             print(f"BOGO apples discount:  -{bill['bogo_discount']:.2f}")
-            print(f"After item discounts:   {bill['after_item_discounts']:.2f}")
+            print(
+                f"After item discounts:   {bill['after_item_discounts']:.2f}")
             print(f"Cart discount chosen:   {bill['cart_discount_name']}")
             print(f"Cart discount value:   -{bill['cart_discount_value']:.2f}")
             print(f"TOTAL:                  {bill['total']:.2f}")
