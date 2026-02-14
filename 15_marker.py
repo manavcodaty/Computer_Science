@@ -1,9 +1,9 @@
 import os
 import random
 import sys
+import termios
 import time
 import tty
-import termios
 
 # List of fake hacking messages
 MESSAGES = [
@@ -24,24 +24,43 @@ MESSAGES = [
 ]
 
 # Terminal colors (ANSI escape codes)
-COLORS = ["\033[91m", "\033[92m", "\033[93m", "\033[94m", "\033[95m", "\033[96m", "\033[97m"]
+COLORS = [
+    "\033[91m",
+    "\033[92m",
+    "\033[93m",
+    "\033[94m",
+    "\033[95m",
+    "\033[96m",
+    "\033[97m",
+]
 RESET = "\033[0m"
 
 # Clear the terminal
+
+
 def clear_screen():
     os.system("clear" if os.name == "posix" else "cls")
 
+
 # Hide cursor
+
+
 def hide_cursor():
     sys.stdout.write("\033[?25l")
     sys.stdout.flush()
 
+
 # Show cursor (for when exiting)
+
+
 def show_cursor():
     sys.stdout.write("\033[?25h")
     sys.stdout.flush()
 
+
 # Stream fake hacking text
+
+
 def stream_text(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
@@ -49,25 +68,40 @@ def stream_text(duration):
         print(color + random.choice(MESSAGES) + RESET)
         time.sleep(random.uniform(0.02, 0.05))
 
+
 # Flashing screen effect
+
+
 def flash_screen(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
         color_code = random.randint(40, 47)  # Background color codes (ANSI)
-        sys.stdout.write(f"\033[{color_code}m\033[2J")  # Change background & clear screen
+        # Change background & clear screen
+        sys.stdout.write(f"\033[{color_code}m\033[2J")
         sys.stdout.flush()
         time.sleep(0.05)
 
+
 # Chaotic text stream
+
+
 def chaotic_stream(duration):
     start_time = time.time()
     while time.time() - start_time < duration:
         color = random.choice(COLORS)
-        text = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()", k=random.randint(20, 40)))
+        text = "".join(
+            random.choices(
+                "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()",
+                k=random.randint(20, 40),
+            )
+        )
         print(color + text + RESET)
         time.sleep(random.uniform(0.02, 0.05))
 
+
 # Fake shutdown sequence
+
+
 def fake_shutdown():
     clear_screen()
     print("\033[91mSystem Error Detected...\033[0m")
@@ -83,7 +117,10 @@ def fake_shutdown():
     time.sleep(2)
     clear_screen()
 
+
 # Lockout mode (disable input except Ctrl+C)
+
+
 def lockout():
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -99,6 +136,7 @@ def lockout():
         sys.exit(0)
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
 
 def main():
     try:
@@ -124,6 +162,7 @@ def main():
         sys.stdout.write("\033[0m\033[2J")  # Reset terminal colors
         print("\n\033[91m[ABORTED] Emergency Shut Down.\033[0m")
         sys.exit(0)
+
 
 # Run main function
 if __name__ == "__main__":
