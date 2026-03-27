@@ -140,7 +140,9 @@ def _handle_room_booking(user, state: storage.AppState) -> None:
             if not available:
                 print("  (none)")
             for r in available:
-                print(f"- {r.id}: {r.name} ({r.type}), cap {r.capacity}, {', '.join(r.features)}")
+                print(
+                    f"- {r.id}: {r.name} ({r.type}), cap {r.capacity}, {', '.join(r.features)}"
+                )
             _pause()
         elif choice == "3":
             if not auth.require_role(user, {"student", "teacher", "admin"}):
@@ -183,11 +185,14 @@ def _handle_room_booking(user, state: storage.AppState) -> None:
             if created is None:
                 print("No booking created.")
             else:
-                print(f"Booking {created.id} created with status '{created.status}'.")
+                print(
+                    f"Booking {created.id} created with status '{created.status}'.")
             _save_state(state)
             _pause()
         elif choice == "4":
-            future = room_booking.list_user_future_bookings(user, state.bookings, state.rooms_by_id)
+            future = room_booking.list_user_future_bookings(
+                user, state.bookings, state.rooms_by_id
+            )
             if not future:
                 _pause()
                 continue
@@ -229,7 +234,9 @@ def _handle_noticeboard(user, state: storage.AppState) -> None:
                 print()
                 for a in items:
                     expires = a.expires_on.isoformat() if a.expires_on else "never"
-                    print(f"- {a.id} [{a.audience}] (expires {expires}) {a.title}\n  {a.body}")
+                    print(
+                        f"- {a.id} [{a.audience}] (expires {expires}) {a.title}\n  {a.body}"
+                    )
             _pause()
         elif choice == "2":
             if not auth.require_role(user, {"teacher", "admin"}):
@@ -240,12 +247,19 @@ def _handle_noticeboard(user, state: storage.AppState) -> None:
             body = _prompt_text("Body")
             if body is None:
                 continue
-            audience = _prompt_menu("Audience", [("1", "all"), ("2", "students"), ("3", "teachers"), ("q", "Back")])
+            audience = _prompt_menu(
+                "Audience",
+                [("1", "all"), ("2", "students"),
+                 ("3", "teachers"), ("q", "Back")],
+            )
             if audience == "q":
                 continue
-            audience_value = {"1": "all", "2": "students", "3": "teachers"}[audience]
+            audience_value = {"1": "all", "2": "students",
+                              "3": "teachers"}[audience]
             while True:
-                raw = input("Expiry date YYYY-MM-DD (blank for none, 'q' to go back): ").strip()
+                raw = input(
+                    "Expiry date YYYY-MM-DD (blank for none, 'q' to go back): "
+                ).strip()
                 if raw.lower() == "q":
                     expires = "__back__"
                     break
@@ -273,7 +287,9 @@ def _handle_noticeboard(user, state: storage.AppState) -> None:
         elif choice == "3":
             if not auth.require_role(user, {"teacher", "admin"}):
                 continue
-            active = noticeboard.list_announcements(user, state.announcements, include_archived=True)
+            active = noticeboard.list_announcements(
+                user, state.announcements, include_archived=True
+            )
             if not active:
                 print("\n(no announcements)")
                 _pause()
@@ -284,14 +300,17 @@ def _handle_noticeboard(user, state: storage.AppState) -> None:
             ann_id = _prompt_text("Announcement ID to archive")
             if ann_id is None:
                 continue
-            ok = noticeboard.archive_announcement(user, ann_id, state.announcements, undo_stack)
+            ok = noticeboard.archive_announcement(
+                user, ann_id, state.announcements, undo_stack
+            )
             if ok:
                 _save_state(state)
             _pause()
         elif choice == "4":
             if not auth.require_role(user, {"teacher", "admin"}):
                 continue
-            ok = noticeboard.undo_last_archive(user, state.announcements, undo_stack)
+            ok = noticeboard.undo_last_archive(
+                user, state.announcements, undo_stack)
             if ok:
                 _save_state(state)
             _pause()
@@ -312,13 +331,17 @@ def _handle_achievements(user, state: storage.AppState) -> None:
         if choice == "q":
             return
         if choice == "1":
-            achievements.view_student_profile(user, state.achievements_by_student_id, state.users_by_id)
+            achievements.view_student_profile(
+                user, state.achievements_by_student_id, state.users_by_id
+            )
             _pause()
         elif choice == "2":
             top_n = _prompt_int("Show top N", 1, 50)
             if top_n is None:
                 continue
-            rows = achievements.leaderboard(state.achievements_by_student_id, top_n=top_n)
+            rows = achievements.leaderboard(
+                state.achievements_by_student_id, top_n=top_n
+            )
             if not rows:
                 print("\n(no achievement records)")
             else:
@@ -331,12 +354,15 @@ def _handle_achievements(user, state: storage.AppState) -> None:
             student = _prompt_text("Student username")
             if student is None:
                 continue
-            student_id = storage.find_user_id_by_username(state.users_by_id, student)
+            student_id = storage.find_user_id_by_username(
+                state.users_by_id, student)
             if not student_id:
                 print("Unknown student username.")
                 _pause()
                 continue
-            points = _prompt_int("Points", state.config["points_min"], state.config["points_max"])
+            points = _prompt_int(
+                "Points", state.config["points_min"], state.config["points_max"]
+            )
             if points is None:
                 continue
             category = _prompt_text("Category")
@@ -362,7 +388,8 @@ def _handle_achievements(user, state: storage.AppState) -> None:
             student = _prompt_text("Student username")
             if student is None:
                 continue
-            student_id = storage.find_user_id_by_username(state.users_by_id, student)
+            student_id = storage.find_user_id_by_username(
+                state.users_by_id, student)
             if not student_id:
                 print("Unknown student username.")
                 _pause()
@@ -424,12 +451,17 @@ def _handle_admin_tools(user, state: storage.AppState) -> None:
             pin = _prompt_text("PIN")
             if pin is None:
                 continue
-            role_choice = _prompt_menu("Role", [("1", "student"), ("2", "teacher"), ("3", "admin"), ("q", "Back")])
+            role_choice = _prompt_menu(
+                "Role",
+                [("1", "student"), ("2", "teacher"),
+                 ("3", "admin"), ("q", "Back")],
+            )
             if role_choice == "q":
                 continue
             role = {"1": "student", "2": "teacher", "3": "admin"}[role_choice]
             try:
-                storage.create_user(state, username=username, pin=pin, role=role)
+                storage.create_user(
+                    state, username=username, pin=pin, role=role)
             except ValueError as e:
                 print(e)
             else:
@@ -449,8 +481,15 @@ def _handle_admin_tools(user, state: storage.AppState) -> None:
             features_raw = _prompt_text("Features (comma-separated)")
             if features_raw is None:
                 continue
-            features = [f.strip() for f in features_raw.split(",") if f.strip()]
-            storage.add_room(state, name=name, room_type=room_type, capacity=capacity, features=features)
+            features = [f.strip()
+                        for f in features_raw.split(",") if f.strip()]
+            storage.add_room(
+                state,
+                name=name,
+                room_type=room_type,
+                capacity=capacity,
+                features=features,
+            )
             _save_state(state)
             print("Room added.")
             _pause()
@@ -466,12 +505,19 @@ def run_cli() -> int:
     logger.log_event("login_success", user=user)
     while True:
         try:
-            options = [("1", "Room Booking"), ("2", "Noticeboard"), ("3", "Achievements")]
+            options = [
+                ("1", "Room Booking"),
+                ("2", "Noticeboard"),
+                ("3", "Achievements"),
+            ]
             if user.role == "admin":
                 options.append(("4", "Admin Tools"))
-            options.extend([("s", "Save"), ("x", "Save & Exit"), ("q", "Exit (no save)")])
+            options.extend(
+                [("s", "Save"), ("x", "Save & Exit"), ("q", "Exit (no save)")]
+            )
 
-            choice = _prompt_menu(f"Main Menu ({user.username} / {user.role})", options)
+            choice = _prompt_menu(
+                f"Main Menu ({user.username} / {user.role})", options)
             if choice == "1":
                 _handle_room_booking(user, state)
             elif choice == "2":
@@ -543,9 +589,18 @@ def run_demo() -> int:
         approval_required=True,
         demo_auto=True,
     )
-    b1 = next((b for b in state.bookings if b.user_id == student1.id and b.room_id == room_id and b.date == today), None)
+    b1 = next(
+        (
+            b
+            for b in state.bookings
+            if b.user_id == student1.id and b.room_id == room_id and b.date == today
+        ),
+        None,
+    )
     if b1 is not None:
-        room_booking.cancel_booking(admin, b1.id, state.bookings, state.waitlists, approval_required=True)
+        room_booking.cancel_booking(
+            admin, b1.id, state.bookings, state.waitlists, approval_required=True
+        )
 
     noticeboard.create_announcement(
         user=teacher,
@@ -556,8 +611,15 @@ def run_demo() -> int:
         announcements=state.announcements,
     )
     if state.announcements:
-        noticeboard.archive_announcement(teacher, state.announcements[0].id, state.announcements, state.undo_archive_stack)
-        noticeboard.undo_last_archive(teacher, state.announcements, state.undo_archive_stack)
+        noticeboard.archive_announcement(
+            teacher,
+            state.announcements[0].id,
+            state.announcements,
+            state.undo_archive_stack,
+        )
+        noticeboard.undo_last_archive(
+            teacher, state.announcements, state.undo_archive_stack
+        )
 
     achievements.award_points(
         teacher_user=teacher,
@@ -582,7 +644,9 @@ def run_demo() -> int:
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(prog="smart-school-system")
-    parser.add_argument("--demo", action="store_true", help="run a short scripted demo scenario")
+    parser.add_argument(
+        "--demo", action="store_true", help="run a short scripted demo scenario"
+    )
     args = parser.parse_args(argv)
 
     try:
@@ -595,5 +659,7 @@ def main(argv: list[str] | None = None) -> None:
         raise SystemExit(130)
     except Exception:
         logger.log_exception("fatal_error", traceback.format_exc())
-        print("\nA fatal error occurred. Details logged to smart_school_system/logs/app.log")
+        print(
+            "\nA fatal error occurred. Details logged to smart_school_system/logs/app.log"
+        )
         raise

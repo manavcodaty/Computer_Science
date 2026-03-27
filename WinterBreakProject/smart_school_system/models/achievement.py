@@ -27,4 +27,3 @@ class AchievementRecord:
             points_log=list(data.get("points_log", [])),
             badges=list(data.get("badges", [])),
         )
-
