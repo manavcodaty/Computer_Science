@@ -1,11 +1,13 @@
-
-from typing import List, Tuple, Dict
+from typing import Dict, List, Tuple
 
 # -------------------------------
 # 1) INITIALS EXTRACTOR
 # -------------------------------
 
-def extract_initials(full_name: str, *, add_dots: bool = False, to_upper: bool = True) -> str:
+
+def extract_initials(
+    full_name: str, *, add_dots: bool = False, to_upper: bool = True
+) -> str:
     """
     Take a full name (e.g., 'Samir Ahmed Patel') and return initials.
     - add_dots=True  -> 'S.A.P'
@@ -31,6 +33,7 @@ def extract_initials(full_name: str, *, add_dots: bool = False, to_upper: bool =
 # -------------------------------
 # 2) SENTENCE WORD REVERSER
 # -------------------------------
+
 
 def reverse_each_word(sentence: str) -> Tuple[str, int]:
     """
@@ -68,7 +71,10 @@ def reverse_each_word(sentence: str) -> Tuple[str, int]:
 # 3) EMAIL ADDRESS VALIDATOR
 # -------------------------------
 
-def validate_email(addr: str, *, school_domain: str = "school.com") -> Dict[str, object]:
+
+def validate_email(
+    addr: str, *, school_domain: str = "school.com"
+) -> Dict[str, object]:
     """
     Validate simple email rules:
       - must contain exactly one '@'
@@ -111,7 +117,9 @@ def validate_email(addr: str, *, school_domain: str = "school.com") -> Dict[str,
         return result
 
     # Basic character scan (letters, digits, allowed specials in a simple set)
-    allowed_local = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._+-")
+    allowed_local = set(
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._+-"
+    )
     if any(ch not in allowed_local for ch in local):
         result["reason"] = "Illegal character in local part"
         return result
@@ -120,7 +128,9 @@ def validate_email(addr: str, *, school_domain: str = "school.com") -> Dict[str,
     result["reason"] = "OK"
     result["local"] = local
     result["domain"] = domain
-    result["type"] = "School email" if domain.lower() == school_domain.lower() else "Other email"
+    result["type"] = (
+        "School email" if domain.lower() == school_domain.lower() else "Other email"
+    )
     return result
 
 
@@ -128,6 +138,7 @@ class EmailBucket:
     """
     Stores valid emails for later use.
     """
+
     def __init__(self, school_domain: str = "school.com"):
         self.school_domain = school_domain
         self.valid_emails: List[str] = []
@@ -152,8 +163,13 @@ if __name__ == "__main__":
         "Mary-Jane Watson",
         "a b c",
     ]:
-        print(name, "->", extract_initials(name, add_dots=False),
-              "| dotted:", extract_initials(name, add_dots=True))
+        print(
+            name,
+            "->",
+            extract_initials(name, add_dots=False),
+            "| dotted:",
+            extract_initials(name, add_dots=True),
+        )
 
     # 2) Sentence word reverser
     print("\n== Sentence Word Reverser ==")
@@ -178,6 +194,8 @@ if __name__ == "__main__":
     ]
     for e in emails:
         res = bucket.add(e)
-        print(f"{e:30} -> valid={res['is_valid']}, reason={res['reason']}, domain={res['domain']}, type={res['type']}")
+        print(
+            f"{e:30} -> valid={res['is_valid']}, reason={res['reason']}, domain={res['domain']}, type={res['type']}"
+        )
 
     print("Stored valid emails:", bucket.valid_emails)
