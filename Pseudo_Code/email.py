@@ -1,4 +1,3 @@
-
 email = input("Enter email address: ")
 
 has_at = False
