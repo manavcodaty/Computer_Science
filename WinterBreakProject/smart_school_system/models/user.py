@@ -30,4 +30,3 @@ class User:
             pin=data.get("pin"),
             role=str(data["role"]),
         )
-

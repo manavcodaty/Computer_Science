@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from smart_school_system.core.logger import log_event
 from smart_school_system.core import storage
+from smart_school_system.core.logger import log_event
 from smart_school_system.models.achievement import AchievementRecord
 from smart_school_system.models.user import User
 
 
-def _get_record(achievements_by_student_id: dict[str, AchievementRecord], student_id: str) -> AchievementRecord:
+def _get_record(
+    achievements_by_student_id: dict[str, AchievementRecord], student_id: str
+) -> AchievementRecord:
     rec = achievements_by_student_id.get(student_id)
     if rec is None:
         rec = AchievementRecord(student_id=student_id)
@@ -52,7 +54,13 @@ def award_badge(
     if badge_name not in allowed_badges:
         raise ValueError("Badge name not in allowed list.")
     rec = _get_record(achievements_by_student_id, student_id)
-    rec.badges.append({"badge_name": badge_name, "date": date.today().isoformat(), "awarded_by": teacher_user.id})
+    rec.badges.append(
+        {
+            "badge_name": badge_name,
+            "date": date.today().isoformat(),
+            "awarded_by": teacher_user.id,
+        }
+    )
     log_event("badge_awarded", user=teacher_user)
     storage.save_json(
         str(storage.data_path("achievements.json")),
@@ -60,7 +68,11 @@ def award_badge(
     )
 
 
-def view_student_profile(user: User, achievements_by_student_id: dict[str, AchievementRecord], users_by_id: dict[str, User]) -> None:
+def view_student_profile(
+    user: User,
+    achievements_by_student_id: dict[str, AchievementRecord],
+    users_by_id: dict[str, User],
+) -> None:
     target_id = user.id
     rec = achievements_by_student_id.get(target_id)
     print(f"\nProfile: {user.username}")
@@ -81,11 +93,16 @@ def view_student_profile(user: User, achievements_by_student_id: dict[str, Achie
         print("  (none)")
     else:
         for entry in rec.points_log[-20:]:
-            print(f"  - {entry['date']}: {entry['points']} [{entry['category']}] {entry['note']}")
+            print(
+                f"  - {entry['date']}: {entry['points']} [{entry['category']}] {entry['note']}"
+            )
 
 
-def leaderboard(achievements_by_student_id: dict[str, AchievementRecord], top_n: int = 10) -> list[tuple[str, int]]:
-    rows = [(sid, rec.total_points) for sid, rec in achievements_by_student_id.items()]
+def leaderboard(
+    achievements_by_student_id: dict[str, AchievementRecord], top_n: int = 10
+) -> list[tuple[str, int]]:
+    rows = [(sid, rec.total_points)
+            for sid, rec in achievements_by_student_id.items()]
     rows.sort(key=lambda r: (-r[1], r[0]))
     if not rows:
         return []
@@ -95,7 +112,9 @@ def leaderboard(achievements_by_student_id: dict[str, AchievementRecord], top_n:
     return [r for r in rows if r[1] >= cutoff_points]
 
 
-def print_leaderboard(rows: list[tuple[str, int]], users_by_id: dict[str, User]) -> None:
+def print_leaderboard(
+    rows: list[tuple[str, int]], users_by_id: dict[str, User]
+) -> None:
     last_points = None
     rank = 0
     for i, (sid, points) in enumerate(rows, start=1):

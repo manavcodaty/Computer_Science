@@ -15,7 +15,8 @@ from smart_school_system.models.user import User
 def list_rooms(rooms: dict[str, Room]) -> None:
     print("\nRooms:")
     for r in rooms.values():
-        features = ", ".join(r.features) if r.features else "no features listed"
+        features = ", ".join(
+            r.features) if r.features else "no features listed"
         print(f"- {r.id}: {r.name} [{r.type}] cap={r.capacity} ({features})")
 
 
@@ -27,7 +28,9 @@ def _time_tuple(t: time) -> tuple[int, int]:
     return (t.hour, t.minute)
 
 
-def has_conflict(room_id: str, booking_date: date, start: time, end: time, bookings: list[Booking]) -> bool:
+def has_conflict(
+    room_id: str, booking_date: date, start: time, end: time, bookings: list[Booking]
+) -> bool:
     start_m = _time_tuple(start)
     end_m = _time_tuple(end)
     for b in bookings:
@@ -57,7 +60,9 @@ def find_available_rooms(
     return available
 
 
-def enqueue_waitlist(slot_key: str, user_id: str, waitlists: dict[str, deque[str]]) -> None:
+def enqueue_waitlist(
+    slot_key: str, user_id: str, waitlists: dict[str, deque[str]]
+) -> None:
     q = waitlists.setdefault(slot_key, deque())
     if user_id in q:
         return
@@ -65,11 +70,19 @@ def enqueue_waitlist(slot_key: str, user_id: str, waitlists: dict[str, deque[str
     _persist(bookings=None, waitlists=waitlists)
 
 
-def _persist(bookings: list[Booking] | None, waitlists: dict[str, deque[str]] | None) -> None:
+def _persist(
+    bookings: list[Booking] | None, waitlists: dict[str, deque[str]] | None
+) -> None:
     if bookings is not None:
-        storage.save_json(str(storage.data_path("bookings.json")), [b.to_dict() for b in bookings])
+        storage.save_json(
+            str(storage.data_path("bookings.json")), [
+                b.to_dict() for b in bookings]
+        )
     if waitlists is not None:
-        storage.save_json(str(storage.data_path("waitlists.json")), {k: list(q) for k, q in waitlists.items()})
+        storage.save_json(
+            str(storage.data_path("waitlists.json")),
+            {k: list(q) for k, q in waitlists.items()},
+        )
 
 
 def _parse_slot_key(slot_key: str) -> tuple[str, date, time, time] | None:
@@ -152,7 +165,8 @@ def request_booking(
         elif on_conflict == "cancel":
             join = "n"
         else:
-            raw = safe_input("Join waitlist for this slot? (y/n or 'q' to cancel): ")
+            raw = safe_input(
+                "Join waitlist for this slot? (y/n or 'q' to cancel): ")
             if raw is None:
                 return None
             join = raw.strip().lower()
@@ -183,13 +197,21 @@ def request_booking(
     return booking
 
 
-def list_user_future_bookings(user: User, bookings: list[Booking], rooms: dict[str, Room]) -> list[Booking]:
+def list_user_future_bookings(
+    user: User, bookings: list[Booking], rooms: dict[str, Room]
+) -> list[Booking]:
     today = date.today()
     future = [
         b
         for b in bookings
         if b.user_id == user.id
-        and (b.date > today or (b.date == today and _time_tuple(b.end_time) > _time_tuple(datetime.now().time())))
+        and (
+            b.date > today
+            or (
+                b.date == today
+                and _time_tuple(b.end_time) > _time_tuple(datetime.now().time())
+            )
+        )
         and b.status in {"approved", "pending"}
     ]
     if not future:
@@ -197,7 +219,8 @@ def list_user_future_bookings(user: User, bookings: list[Booking], rooms: dict[s
         return []
     print("\nYour future bookings:")
     for b in future:
-        room_name = rooms.get(b.room_id).name if b.room_id in rooms else b.room_id
+        room_name = rooms.get(
+            b.room_id).name if b.room_id in rooms else b.room_id
         print(
             f"- {b.id} [{b.status}] {b.date.isoformat()} {b.start_time.strftime('%H:%M')}-{b.end_time.strftime('%H:%M')} "
             f"{room_name} purpose={b.purpose}"
@@ -229,7 +252,9 @@ def cancel_booking(
     print("Booking cancelled.")
 
     before = len(bookings)
-    _promote_waitlists_for_room_date(removed.room_id, removed.date, bookings, waitlists, approval_required)
+    _promote_waitlists_for_room_date(
+        removed.room_id, removed.date, bookings, waitlists, approval_required
+    )
     if len(bookings) > before:
         print("A waitlisted user was promoted into an available slot.")
     _persist(bookings=bookings, waitlists=waitlists)
@@ -274,7 +299,9 @@ def admin_review_bookings(
             b.status = "declined"
             log_event("booking_declined", user=admin_user)
             if waitlists is not None:
-                _promote_waitlists_for_room_date(b.room_id, b.date, bookings, waitlists, approval_required)
+                _promote_waitlists_for_room_date(
+                    b.room_id, b.date, bookings, waitlists, approval_required
+                )
         else:
             continue
     print("Review complete.")

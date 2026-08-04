@@ -43,4 +43,3 @@ class Announcement:
             expires_on=parse_date(expires) if expires else None,
             status=str(data.get("status", "active")),
         )
-

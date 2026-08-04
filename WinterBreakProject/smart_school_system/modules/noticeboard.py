@@ -4,8 +4,8 @@ import copy
 import uuid
 from datetime import date, datetime
 
-from smart_school_system.core.logger import log_event
 from smart_school_system.core import storage
+from smart_school_system.core.logger import log_event
 from smart_school_system.models.announcement import Announcement
 from smart_school_system.models.user import User
 
@@ -30,7 +30,10 @@ def create_announcement(
     )
     announcements.append(ann)
     log_event("announcement_created", user=user)
-    storage.save_json(str(storage.data_path("announcements.json")), [a.to_dict() for a in announcements])
+    storage.save_json(
+        str(storage.data_path("announcements.json")),
+        [a.to_dict() for a in announcements],
+    )
     return ann
 
 
@@ -50,7 +53,9 @@ def _is_visible_to(user: User, ann: Announcement) -> bool:
     return False
 
 
-def list_announcements(user: User, announcements: list[Announcement], include_archived: bool = False) -> list[Announcement]:
+def list_announcements(
+    user: User, announcements: list[Announcement], include_archived: bool = False
+) -> list[Announcement]:
     out: list[Announcement] = []
     for ann in announcements:
         if include_archived:
@@ -62,7 +67,12 @@ def list_announcements(user: User, announcements: list[Announcement], include_ar
     return out
 
 
-def archive_announcement(user: User, announcement_id: str, announcements: list[Announcement], undo_stack: list[dict]) -> bool:
+def archive_announcement(
+    user: User,
+    announcement_id: str,
+    announcements: list[Announcement],
+    undo_stack: list[dict],
+) -> bool:
     ann = next((a for a in announcements if a.id == announcement_id), None)
     if ann is None:
         print("Announcement not found.")
@@ -73,12 +83,17 @@ def archive_announcement(user: User, announcement_id: str, announcements: list[A
     undo_stack.append(copy.deepcopy(ann.to_dict()))  # stack push
     ann.status = "archived"
     log_event("announcement_archived", user=user)
-    storage.save_json(str(storage.data_path("announcements.json")), [a.to_dict() for a in announcements])
+    storage.save_json(
+        str(storage.data_path("announcements.json")),
+        [a.to_dict() for a in announcements],
+    )
     print("Archived.")
     return True
 
 
-def undo_last_archive(user: User, announcements: list[Announcement], undo_stack: list[dict]) -> bool:
+def undo_last_archive(
+    user: User, announcements: list[Announcement], undo_stack: list[dict]
+) -> bool:
     if not undo_stack:
         print("Nothing to undo.")
         return False
@@ -90,6 +105,9 @@ def undo_last_archive(user: User, announcements: list[Announcement], undo_stack:
     else:
         current.status = "active"
     log_event("announcement_unarchived", user=user)
-    storage.save_json(str(storage.data_path("announcements.json")), [a.to_dict() for a in announcements])
+    storage.save_json(
+        str(storage.data_path("announcements.json")),
+        [a.to_dict() for a in announcements],
+    )
     print("Undo complete.")
     return True

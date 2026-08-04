@@ -5,4 +5,3 @@ from smart_school_system.models.room import Room
 from smart_school_system.models.user import User
 
 __all__ = ["User", "Room", "Booking", "Announcement", "AchievementRecord"]
-

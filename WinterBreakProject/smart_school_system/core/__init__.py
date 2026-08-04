@@ -10,4 +10,3 @@ __all__ = [
     "load_state",
     "save_state",
 ]
-

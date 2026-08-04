@@ -45,4 +45,3 @@ class Booking:
             status=str(data.get("status", "pending")),
             created_at=datetime.fromisoformat(str(data["created_at"])),
         )
-
